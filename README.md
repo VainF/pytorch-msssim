@@ -24,7 +24,7 @@ python tests/tests.py
 
 The outputs:
 ```
-Downloading test image...
+Downloading the test image...
 ====> Single Image
 sigma=0.000000 compare_ssim=1.000000 (291.220903 ms) ssim_torch=1.000000 (389.045000 ms)
 sigma=1.000000 compare_ssim=0.991319 (302.870035 ms) ssim_torch=0.991312 (463.139057 ms)
