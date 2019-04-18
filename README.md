@@ -16,7 +16,7 @@ ms_ssim_val = ms_ssim( X, Y, win_size=11, data_range=255, size_average=False ) #
 
 # Tests
 
-compared with [scipy.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim)
+compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim)
 
 ```python
 python tests/tests.py
