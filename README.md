@@ -2,7 +2,7 @@
 
 A fast and differentiable MS-SSIM and SSIM for pytorch.
 
-This repo is based on [https://github.com/jorge-pessoa/pytorch-msssim](https://github.com/jorge-pessoa/pytorch-msssim). For faster calculation speed, Two 1D convolutions (in x and y direction) are used instead of a 2D convolution.
+For faster calculation speed, Two 1D convolutions (in x and y direction) are used instead of a 2D convolution.
 
 # Example
 
