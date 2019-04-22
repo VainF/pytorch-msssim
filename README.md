@@ -11,26 +11,25 @@ All calculations will be on the same device as inputs.
 
 ```python
 from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
-# X: (N,C,H,W) a batch of images with values ranging from 0 to 255.
-# Y: (N,C,H,W)  
-ssim_val = ssim( X, Y, win_size=11, data_range=255, size_average=False) # return (N,)
-ms_ssim_val = ms_ssim( X, Y, win_size=11, data_range=255, size_average=False ) #(N,)
+# X: (N,3,H,W) a batch of RGB images with values ranging from 0 to 255.
+# Y: (N,3,H,W)  
+ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
+ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
 
 # or set 'size_average=True' to get a scalar value as loss.
-ssim_loss = ssim( X, Y, win_size=11, data_range=255, size_average=True)
-ms_ssim_loss = ms_ssim( X, Y, win_size=11, data_range=255, size_average=True )
+ssim_loss = ssim( X, Y, data_range=255, size_average=True) # return scalar value
+ms_ssim_loss = ms_ssim( X, Y, data_range=255, size_average=True )
 
 # you can also use MS_SSIM & SSIM classes to reuse windows. 
-ssim_module = SSIM(win_size=11, sigma=1.5, size_average=True, data_range=255, channel=3)
-ms_ssim_module = MS_SSIM(win_size=11, sigma=1.5, size_average=True, data_range=255, channel=3)
-
+ssim_module = SSIM(win_size=11, size_average=True, data_range=255)
+ms_ssim_module = MS_SSIM(win_size=11, size_average=True, data_range=255)
 ssim_loss = ssim_module(X, Y)
 ms_ssim_loss = ms_ssim_module(X, Y)
 ```
 
 # Tests
 
-compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim) on CPU.
+Compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim) on CPU.
 
 ```python
 python tests/tests.py
