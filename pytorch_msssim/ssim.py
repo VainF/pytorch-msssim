@@ -72,7 +72,7 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
     else:
         return ssim_val
 
-def ssim(X, Y, win_size=11, win=None, data_range=255, size_average=True, full=False):
+def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False):
     """ SSIM
     """
     if len(X.shape)!=4:
@@ -87,7 +87,7 @@ def ssim(X, Y, win_size=11, win=None, data_range=255, size_average=True, full=Fa
     if not (win_size % 2 == 1):
         raise ValueError('Window size must be odd.')
     
-    win_sigma = 1.5
+    win_sigma = win_sigma
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
         win = win.repeat(X.shape[1], 1, 1, 1)
@@ -108,11 +108,11 @@ def ssim(X, Y, win_size=11, win=None, data_range=255, size_average=True, full=Fa
     else:
         return ssim_val
 
-def ms_ssim(X, Y, win_size=11, win=None, data_range=255, size_average=True, full=False, weights=None):
+def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, weights=None):
     if weights is None:
         weights = torch.FloatTensor( [0.0448, 0.2856, 0.3001, 0.2363, 0.1333] ).to(X.device, dtype=X.dtype)
     
-    win_sigma = 1.5
+    win_sigma = win_sigma
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
         win = win.repeat(X.shape[1], 1, 1, 1)
