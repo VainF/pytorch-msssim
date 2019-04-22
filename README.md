@@ -13,7 +13,7 @@ from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
 ssim_val = ssim( X, Y, win_size=11, data_range=255, size_average=False) # return (N,)
 ms_ssim_val = ms_ssim( X, Y, win_size=11, data_range=255, size_average=False ) #(N,)
 
-# or set 'size_average=True' to get a scalar as loss.
+# or set 'size_average=True' to get a scalar value as loss.
 ssim_loss = ssim( X, Y, win_size=11, data_range=255, size_average=True)
 ms_ssim_loss = ms_ssim( X, Y, win_size=11, data_range=255, size_average=True )
 
