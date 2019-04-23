@@ -225,7 +225,7 @@ class SSIM(torch.nn.Module):
         """
 
         super(SSIM, self).__init__()
-        self.win = _fspecial_gauss_1d(win_size, sigma).repeat(channel,1,1,1)
+        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat(channel,1,1,1)
         self.size_average = size_average
         self.data_range = data_range
 
@@ -245,7 +245,7 @@ class MS_SSIM(torch.nn.Module):
         """
 
         super(MS_SSIM, self).__init__()
-        self.win = _fspecial_gauss_1d(win_size, sigma).repeat(channel,1,1,1)
+        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat(channel,1,1,1)
         self.size_average = size_average
         self.data_range = data_range
         self.weights = weights
