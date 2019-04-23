@@ -57,7 +57,7 @@ Pass
 
 # An autoencoder trained with MS_SSIM
 
-![results](tests/ae_ms_ssim.png)
+![results](tests/ae_ms_ssim.jpg)
 
 
 # Reference
