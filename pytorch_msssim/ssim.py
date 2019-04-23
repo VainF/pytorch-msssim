@@ -52,16 +52,15 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
     batch, channel, height, width = X.shape
     compensation=1.0
 
-    # SSIM
     C1 = (K1 * data_range)**2
     C2 = (K2 * data_range)**2
     
     #####################################
-    # concat and 1d conv for faster conv
-   
+    # the 5 convs (blurs) can be combined
     concat_input = torch.cat( [X, Y, X*X, Y*Y, X*Y], dim=1) 
-    concat_win = win.repeat(5,1,1,1).to(X.device, dtype=X.dtype) #win.repeat(5, 1, 1, 1)
+    concat_win = win.repeat(5,1,1,1).to(X.device, dtype=X.dtype)
     concat_out = gaussian_filter( concat_input, concat_win  )
+
     # unpack from conv output
     mu1, mu2, sigma1_sq, sigma2_sq, sigma12 = ( concat_out[:, idx*channel:(idx+1)*channel,:,: ] for idx in range(5) )
 
@@ -167,7 +166,18 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
     Returns:
         torch.Tensor: ms-ssim results
     """
+    if len(X.shape)!=4:
+        raise ValueError('Input images must 4-d tensor.')
 
+    if not X.type()==Y.type():
+        raise ValueError('Input images must have the same dtype.')
+    
+    if not X.shape == Y.shape:
+        raise ValueError('Input images must have the same dimensions.')
+
+    if not (win_size % 2 == 1):
+        raise ValueError('Window size must be odd.')
+        
     if weights is None:
         weights = torch.FloatTensor( [0.0448, 0.2856, 0.3001, 0.2363, 0.1333] ).to(X.device, dtype=X.dtype)
     
