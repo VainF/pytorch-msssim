@@ -29,7 +29,7 @@ def gaussian_filter(input, win):
 
     N,C,H,W = input.shape
     out = F.conv2d( input, win, stride=1, padding=0, groups=C)
-    out = out.transpose(2,3).contiguous()
+    out = out.transpose(2,3).contiguous() # make it contiguous in y direction for memory efficiency
     out = F.conv2d( out, win, stride=1, padding=0, groups=C)
     return out.transpose(2,3).contiguous()
 
@@ -165,7 +165,7 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
         weights (list, optional): weights for different levels
 
     Returns:
-        torch.Tensor: ssim results
+        torch.Tensor: ms-ssim results
     """
 
     if weights is None:
