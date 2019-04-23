@@ -55,6 +55,11 @@ Pass
 Pass
 ```
 
+# An autoencoder trained with MS_SSIM
+
+![results](tests/ae_ms_ssim.png)
+
+
 # Reference
 
 [https://github.com/jorge-pessoa/pytorch-msssim](https://github.com/jorge-pessoa/pytorch-msssim)  
