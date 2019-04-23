@@ -21,8 +21,8 @@ ssim_loss = ssim( X, Y, win_size=11, data_range=255, size_average=True)
 ms_ssim_loss = ms_ssim( X, Y, win_size=11, data_range=255, size_average=True )
 
 # you can also use MS_SSIM & SSIM classes to reuse windows. 
-ssim_module = SSIM(win_size=11, sigma=1.5, size_average=True, data_range=255, channel=3)
-ms_ssim_module = MS_SSIM(win_size=11, sigma=1.5, size_average=True, data_range=255, channel=3)
+ssim_module = SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
+ms_ssim_module = MS_SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
 
 ssim_loss = ssim_module(X, Y)
 ms_ssim_loss = ms_ssim_module(X, Y)

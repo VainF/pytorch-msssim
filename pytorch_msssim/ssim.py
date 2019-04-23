@@ -1,6 +1,14 @@
 import torch
 import torch.nn.functional as F
 def _fspecial_gauss_1d(size, sigma):
+    r"""Create 1-D gauss kernel
+    Args:
+        size (int): the size of gauss kernel
+        sigma (float): sigma of normal distribution
+
+    Returns:
+        torch.Tensor: 1D kernel
+    """
     coords = torch.arange(size).to(dtype=torch.float)
     coords -= size//2
 
@@ -10,6 +18,15 @@ def _fspecial_gauss_1d(size, sigma):
     return g.unsqueeze(0).unsqueeze(0) 
 
 def gaussian_filter(input, win):
+    r""" Blur input with 1-D kernel
+    Args:
+        input (torch.Tensor): a batch of tensors to be blured
+        window (torch.Tensor): 1-D gauss kernel
+
+    Returns:
+        torch.Tensor: blured tensors
+    """
+
     N,C,H,W = input.shape
     out = F.conv2d( input, win, stride=1, padding=0, groups=C)
     out = out.transpose(2,3).contiguous()
@@ -17,6 +34,19 @@ def gaussian_filter(input, win):
     return out.transpose(2,3).contiguous()
 
 def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
+    r""" Calculate ssim index for X and Y
+    Args:
+        X (torch.Tensor): images
+        Y (torch.Tensor): images
+        win (torch.Tensor): 1-D gauss kernel
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+        full (bool, optional): return sc or not
+
+    Returns:
+        torch.Tensor: ssim results
+    """
+
     K1 = 0.01
     K2 = 0.03
     batch, channel, height, width = X.shape
@@ -73,8 +103,21 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
         return ssim_val
 
 def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False):
-    """ SSIM
+    r""" interface of ssim
+    Args:
+        X (torch.Tensor): images
+        Y (torch.Tensor): images
+        win_size: (int, optional): the size of gauss kernel
+        win_sigma: (float, optional): sigma of normal distribution
+        win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+        full (bool, optional): return sc or not
+
+    Returns:
+        torch.Tensor: ssim results
     """
+
     if len(X.shape)!=4:
         raise ValueError('Input images must 4-d tensor.')
 
@@ -109,6 +152,22 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
         return ssim_val
 
 def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, weights=None):
+    r""" interface of ms-ssim
+    Args:
+        X (torch.Tensor): images
+        Y (torch.Tensor): images
+        win_size: (int, optional): the size of gauss kernel
+        win_sigma: (float, optional): sigma of normal distribution
+        win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
+        data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+        size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+        full (bool, optional): return sc or not
+        weights (list, optional): weights for different levels
+
+    Returns:
+        torch.Tensor: ssim results
+    """
+
     if weights is None:
         weights = torch.FloatTensor( [0.0448, 0.2856, 0.3001, 0.2363, 0.1333] ).to(X.device, dtype=X.dtype)
     
@@ -145,7 +204,16 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
 
 # Classes to re-use window
 class SSIM(torch.nn.Module):
-    def __init__(self, win_size=11, sigma=1.5, size_average=True, data_range=None, channel=3):
+    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3):
+        r""" class for ssim
+        Args:
+            win_size: (int, optional): the size of gauss kernel
+            win_sigma: (float, optional): sigma of normal distribution
+            data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+            size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+            channel (int, optional): input channels (default: 3)
+        """
+
         super(SSIM, self).__init__()
         self.win = _fspecial_gauss_1d(win_size, sigma).repeat(channel,1,1,1)
         self.size_average = size_average
@@ -155,11 +223,22 @@ class SSIM(torch.nn.Module):
         return ssim(X, Y, win=self.win, data_range=self.data_range, size_average=self.size_average)
 
 class MS_SSIM(torch.nn.Module):
-    def __init__(self, win_size=11, sigma=1.5, size_average=True, data_range=None, channel=3):
+    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, weights=None):
+        r""" class for ms-ssim
+        Args:
+            win_size: (int, optional): the size of gauss kernel
+            win_sigma: (float, optional): sigma of normal distribution
+            data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
+            size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
+            channel (int, optional): input channels (default: 3)
+            weights (list, optional): weights for different levels
+        """
+
         super(MS_SSIM, self).__init__()
         self.win = _fspecial_gauss_1d(win_size, sigma).repeat(channel,1,1,1)
         self.size_average = size_average
         self.data_range = data_range
+        self.weights = weights
 
     def forward(self, X, Y):
-        return ms_ssim(X, Y, win=self.win, size_average=self.size_average, data_range=self.data_range)
+        return ms_ssim(X, Y, win=self.win, size_average=self.size_average, data_range=self.data_range, weights=self.weights)
