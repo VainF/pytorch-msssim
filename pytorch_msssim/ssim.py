@@ -73,7 +73,7 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
     sigma12 = compensation * ( sigma12 - mu1_mu2  )
 
     ##########################
-    # implementation of original repo
+    # implementation from original repo
 
     #_mu1 = F.conv2d( X, win, stride=1, padding=0, groups=channel)
     #_mu2 = F.conv2d( Y, win, stride=1, padding=0, groups=channel)
@@ -191,7 +191,6 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
     levels = weights.shape[0]
     mcs = []
     for _ in range(levels):
-        # Only last ssim value will be used
         ssim_val, cs = _ssim( X, Y,
                                 win=win,
                                 data_range=data_range,
