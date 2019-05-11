@@ -7,6 +7,11 @@ see [Gaussian_blur wiki](https://en.wikipedia.org/wiki/Gaussian_blur#Implementat
 
 All calculations will be on the same device as inputs.
 
+# Install
+```
+python setup.py install
+```
+
 # Example
 
 ```python
