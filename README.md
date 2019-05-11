@@ -32,10 +32,6 @@ ms_ssim_loss = ms_ssim_module(X, Y)
 
 Compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim) on CPU.
 
-```python
-python tests/tests.py
-```
-
 The outputs:
 ```
 Downloading the test image...
@@ -57,7 +53,7 @@ Pass
 
 # An autoencoder trained with MS_SSIM
 
-![results](tests/ae_ms_ssim.jpg)
+![results](https://github.com/VainF/Images/blob/master/pytorch_msssim/ae_ms_ssim.jpg)
 *left: original image, right: reconstructed image*
 
 # Reference
