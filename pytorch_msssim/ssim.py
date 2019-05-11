@@ -111,8 +111,8 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
 def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False):
     r""" interface of ssim
     Args:
-        X (torch.Tensor): images
-        Y (torch.Tensor): images
+        X (torch.Tensor): a batch of images, (N,C,H,W)
+        Y (torch.Tensor): a batch of images, (N,C,H,W)
         win_size: (int, optional): the size of gauss kernel
         win_sigma: (float, optional): sigma of normal distribution
         win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
@@ -161,8 +161,8 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
 def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, weights=None):
     r""" interface of ms-ssim
     Args:
-        X (torch.Tensor): images
-        Y (torch.Tensor): images
+        X (torch.Tensor): a batch of images, (N,C,H,W)
+        Y (torch.Tensor): a batch of images, (N,C,H,W)
         win_size: (int, optional): the size of gauss kernel
         win_sigma: (float, optional): sigma of normal distribution
         win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
