@@ -8,8 +8,12 @@ see [Gaussian_blur wiki](https://en.wikipedia.org/wiki/Gaussian_blur#Implementat
 All calculations will be on the same device as inputs.
 
 # Install
-```
+```bash
 python setup.py install
+```
+or
+```bash
+pip install pytorch-msssim
 ```
 
 # Example
