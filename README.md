@@ -1,6 +1,6 @@
 # Pytorch MS-SSIM
 
-fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
+Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 
 For faster calculation speed, the 2D convolution (Gaussian Blur) is replaced by two 1D convolutions.  
 see [Gaussian_blur wiki](https://en.wikipedia.org/wiki/Gaussian_blur#Implementation).
@@ -26,10 +26,10 @@ ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
 ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
 
 # or set 'size_average=True' to get a scalar value as loss.
-ssim_loss = ssim( X, Y, data_range=255, size_average=True) # return scalar value
+ssim_loss = ssim( X, Y, data_range=255, size_average=True) # return a scalar value
 ms_ssim_loss = ms_ssim( X, Y, data_range=255, size_average=True )
 
-# you can also use MS_SSIM & SSIM classes to reuse windows. 
+# or reuse windows with SSIM & MS_SSIM. 
 ssim_module = SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
 ms_ssim_module = MS_SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
 
