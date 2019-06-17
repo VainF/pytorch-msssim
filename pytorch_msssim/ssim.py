@@ -32,10 +32,8 @@ def gaussian_filter(input, win):
 
     N, C, H, W = input.shape
     out = F.conv2d(input, win, stride=1, padding=0, groups=C)
-    # make it contiguous in y direction for memory efficiency
-    out = out.transpose(2, 3).contiguous()
-    out = F.conv2d(out, win, stride=1, padding=0, groups=C)
-    return out.transpose(2, 3).contiguous()
+    out = F.conv2d(out, win.transpose(2, 3), stride=1, padding=0, groups=C)
+    return out
 
 
 def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
