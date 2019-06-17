@@ -7,6 +7,10 @@ see [Gaussian_blur wiki](https://en.wikipedia.org/wiki/Gaussian_blur#Implementat
 
 All calculations will be on the same device as inputs.
 
+# update
+_2019.6.17_  
+Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
+
 # Install
 ```bash
 python setup.py install
@@ -43,18 +47,18 @@ Compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/a
 
 The outputs:
 ```
-Downloading the test image...
+Downloading test image...
 ====> Single Image
-sigma=0.000000 compare_ssim=1.000000 (291.220903 ms) ssim_torch=1.000000 (389.045000 ms)
-sigma=1.000000 compare_ssim=0.991319 (302.870035 ms) ssim_torch=0.991312 (463.139057 ms)
-sigma=2.000000 compare_ssim=0.966552 (416.693926 ms) ssim_torch=0.966527 (445.262909 ms)
-sigma=3.000000 compare_ssim=0.928726 (305.456877 ms) ssim_torch=0.928674 (459.895134 ms)
-sigma=4.000000 compare_ssim=0.882462 (303.186893 ms) ssim_torch=0.882380 (354.626179 ms)
-sigma=5.000000 compare_ssim=0.831174 (279.859304 ms) ssim_torch=0.831065 (354.197025 ms)
-sigma=6.000000 compare_ssim=0.778095 (295.956135 ms) ssim_torch=0.777961 (353.795052 ms)
-sigma=7.000000 compare_ssim=0.726729 (304.435015 ms) ssim_torch=0.726576 (354.927063 ms)
-sigma=8.000000 compare_ssim=0.677140 (287.097931 ms) ssim_torch=0.676973 (359.275103 ms)
-sigma=9.000000 compare_ssim=0.630489 (282.092094 ms) ssim_torch=0.630312 (376.378059 ms)
+sigma=0.000000 compare_ssim=1.000000 (417.248964 ms) ssim_torch=1.000000 (257.593870 ms)
+sigma=1.000000 compare_ssim=0.991320 (326.905012 ms) ssim_torch=0.991320 (135.488033 ms)
+sigma=2.000000 compare_ssim=0.966521 (485.862017 ms) ssim_torch=0.966520 (237.199068 ms)
+sigma=3.000000 compare_ssim=0.928799 (323.492050 ms) ssim_torch=0.928797 (148.905993 ms)
+sigma=4.000000 compare_ssim=0.882271 (290.801048 ms) ssim_torch=0.882267 (146.914005 ms)
+sigma=5.000000 compare_ssim=0.831310 (282.787085 ms) ssim_torch=0.831306 (148.653984 ms)
+sigma=6.000000 compare_ssim=0.778222 (308.619022 ms) ssim_torch=0.778217 (147.915840 ms)
+sigma=7.000000 compare_ssim=0.726444 (290.637970 ms) ssim_torch=0.726438 (133.754253 ms)
+sigma=8.000000 compare_ssim=0.676345 (294.582129 ms) ssim_torch=0.676339 (144.154072 ms)
+sigma=9.000000 compare_ssim=0.629922 (300.610065 ms) ssim_torch=0.629916 (141.150951 ms)
 Pass
 ====> Batch
 Pass
