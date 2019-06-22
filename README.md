@@ -2,9 +2,6 @@
 
 Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 
-For faster calculation speed, the 2D convolution (Gaussian Blur) is replaced by two 1D convolutions.  
-see [Gaussian_blur wiki](https://en.wikipedia.org/wiki/Gaussian_blur#Implementation).
-
 All calculations will be on the same device as inputs.
 
 # update
