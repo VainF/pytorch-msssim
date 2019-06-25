@@ -58,37 +58,18 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False):
     C1 = (K1 * data_range)**2
     C2 = (K2 * data_range)**2
 
-    #####################################
-    # the 5 convs (blurs) can be combined
-    concat_input = torch.cat([X, Y, X*X, Y*Y, X*Y], dim=1)
-    concat_win = win.repeat(5, 1, 1, 1).to(X.device, dtype=X.dtype)
-    concat_out = gaussian_filter(concat_input, concat_win)
+    win = win.to(X.device, dtype=X.dtype)
 
-    # unpack from conv output
-    mu1, mu2, sigma1_sq, sigma2_sq, sigma12 = (
-        concat_out[:, idx*channel:(idx+1)*channel, :, :] for idx in range(5))
+    mu1 = gaussian_filter(X, win)
+    mu2 = gaussian_filter(Y, win)
 
     mu1_sq = mu1.pow(2)
     mu2_sq = mu2.pow(2)
     mu1_mu2 = mu1 * mu2
 
-    sigma1_sq = compensation * (sigma1_sq - mu1_sq)
-    sigma2_sq = compensation * (sigma2_sq - mu2_sq)
-    sigma12 = compensation * (sigma12 - mu1_mu2)
-
-    ##########################
-    # implementation from original repo
-
-    #_mu1 = F.conv2d( X, win, stride=1, padding=0, groups=channel)
-    #_mu2 = F.conv2d( Y, win, stride=1, padding=0, groups=channel)
-
-    #mu1_sq = mu1.pow(2)
-    #mu2_sq = mu2.pow(2)
-    #mu1_mu2 = mu1 * mu2
-
-    #sigma1_sq = compensation * ( F.conv2d( X*X, win, stride=1, padding=0, groups=channel) - mu1_sq )
-    #sigma2_sq = compensation * ( F.conv2d( Y*Y, win, stride=1, padding=0, groups=channel) - mu2_sq )
-    #sigma12 = compensation * ( F.conv2d( X*Y, win, stride=1, padding=0, groups=channel) - mu1_mu2 )
+    sigma1_sq = compensation * ( gaussian_filter(X * X, win) - mu1_sq )
+    sigma2_sq = compensation * ( gaussian_filter(Y * Y, win) - mu2_sq )
+    sigma12   = compensation * ( gaussian_filter(X * Y, win) - mu1_mu2 )
 
     cs_map = (2 * sigma12 + C2) / (sigma1_sq + sigma2_sq + C2)
     ssim_map = ((2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)) * cs_map
