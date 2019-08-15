@@ -8,6 +8,8 @@ All calculations will be on the same device as inputs.
 _2019.6.17_  
 Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
 
+_2019.8.15_  
+[Apply to 5D tensor #6](https://github.com/VainF/pytorch-msssim/issues/6)
 # Install
 ```bash
 python setup.py install
