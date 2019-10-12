@@ -28,7 +28,7 @@
     ```
 
 ## Train
-```python
+```bash
 python train.py --loss_type ssim
 python train.py --loss_type ms_ssim
 ```
