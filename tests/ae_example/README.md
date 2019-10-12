@@ -1,8 +1,7 @@
 # Train an autoencoder with SSIM & MS-SSIM
 
 ## Prepare dataset
-1. Download CLIC datase from https://www.compression.cc/challenge/ and unzip them into datasets/data
-
+1. Download CLIC datase from https://www.compression.cc/challenge/ and unzip them into datasets/data.
 2. Download validation set (Kodak)
     ```bash 
     bash download_kodak.sh
