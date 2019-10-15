@@ -68,7 +68,7 @@ def main():
 
     # optimizer
     optimizer = torch.optim.Adam(model.parameters(),
-                                    lr=1e-4, weight_decay=5e-4)
+                                    lr=1e-4, weight_decay=1e-5)
 
     # checkpoint
     best_score = 0.0
