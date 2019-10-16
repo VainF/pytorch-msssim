@@ -39,7 +39,7 @@ ms_ssim_module = MS_SSIM(win_size=11, win_sigma=1.5, data_range=255, size_averag
 ssim_loss = 1 - ssim_module(X, Y)
 ms_ssim_loss = 1 - ms_ssim_module(X, Y)
 ```
-**Please note that you should maximize ssim to get a high quality image, so the loss function is usually 1-ssim.**
+**Please note that you should maximize ssim to get high quality images, so the loss function is usually 1-ssim.**
 
 # Tests
 
