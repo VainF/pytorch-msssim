@@ -11,25 +11,26 @@ Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://
 _2019.8.15_  
 [Apply to 5D tensor #6](https://github.com/VainF/pytorch-msssim/issues/6)
 # Install
+
 ```bash
-python setup.py install
+pip install pytorch-msssim
 ```
 or
 ```bash
-pip install pytorch-msssim
+python setup.py install
 ```
 
 # Example
 
 ```python
 from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
-# X: (N,3,H,W) a batch of RGB images with values ranging from 0 to 255.
+# X: (N,3,H,W) a batch of RGB images (0~255)
 # Y: (N,3,H,W)  
 ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
 ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
 
 # or set 'size_average=True' to get a scalar value as loss.
-ssim_loss = ssim( X, Y, data_range=255, size_average=True) # return a scalar value
+ssim_loss = ssim( X, Y, data_range=255, size_average=True) # return a scalar
 ms_ssim_loss = ms_ssim( X, Y, data_range=255, size_average=True )
 
 # or reuse windows with SSIM & MS_SSIM. 
