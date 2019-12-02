@@ -104,7 +104,7 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
     """
 
     if len(X.shape) != 4:
-        raise ValueError('Input images must 4-d tensor.')
+        raise ValueError('Input images must be 4-d tensors.')
 
     if not X.type() == Y.type():
         raise ValueError('Input images must have the same dtype.')
@@ -154,7 +154,7 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
         torch.Tensor: ms-ssim results
     """
     if len(X.shape) != 4:
-        raise ValueError('Input images must 4-d tensor.')
+        raise ValueError('Input images must be 4-d tensors.')
 
     if not X.type() == Y.type():
         raise ValueError('Input images must have the same dtype.')
@@ -200,7 +200,6 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
     return msssim_val
 
 
-# Classes to re-use window
 class SSIM(torch.nn.Module):
     def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3):
         r""" class for ssim
@@ -221,7 +220,7 @@ class SSIM(torch.nn.Module):
     def forward(self, X, Y):
         return ssim(X, Y, win=self.win, data_range=self.data_range, size_average=self.size_average)
 
-
+    
 class MS_SSIM(torch.nn.Module):
     def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, weights=None):
         r""" class for ms-ssim
