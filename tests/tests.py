@@ -26,10 +26,10 @@ if __name__ == '__main__':
 
     print("====> Single Image")
     # params = torch.nn.Parameter( torch.ones(img.shape[2], img.shape[0], img.shape[1]), requires_grad=True ) # C, H, W
-    for sigma in range(0, 10, 1):
-        noise = sigma * np.random.randn(*img.shape) + 0
-        img_noise = (img + noise).astype(np.float32)
-
+    for sigma in range(0, 101, 10):
+        noise = sigma * np.random.rand(*img.shape)
+        img_noise = (img + noise).astype(np.float32).clip(0,255)
+        
         begin = time.time()
         ssim_skimage = compare_ssim(img, img_noise, win_size=11, multichannel=True,
                                     sigma=1.5, data_range=255, use_sample_covariance=False, gaussian_weights=True)
@@ -53,6 +53,8 @@ if __name__ == '__main__':
 
         print("sigma=%f compare_ssim=%f (%f ms) ssim_torch=%f (%f ms)" % (
             sigma, ssim_skimage, time_skimage*1000, ssim_torch, time_torch*1000))
+
+        Image.fromarray( img_noise.astype('uint8') ).save('simga_%d_ssim_%.4f.png'%(sigma, ssim_torch.item()))
         assert (np.allclose(ssim_torch, ssim_skimage, atol=5e-4))
 
     print("Pass")
