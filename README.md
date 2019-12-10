@@ -120,7 +120,7 @@ pytorch_msssim.ms_ssim (K2=0.4):  0.6563504934310913
 see 'tests/ae_example'
 
 ![results](https://github.com/VainF/Images/blob/master/pytorch_msssim/ae_ms_ssim.jpg)
-*left: original image, right: reconstructed image*
+*left: the original image, right: the reconstructed image*
 
 # References
 
