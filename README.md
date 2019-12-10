@@ -34,6 +34,8 @@ Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://
 
 # Usages
 
+Calculations will be on the same device as input images.
+
 ```python
 from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
 # X: (N,3,H,W) a batch of non-negative RGB images (0~255)
