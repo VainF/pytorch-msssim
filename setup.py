@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pytorch_msssim",
-    version="0.1.2",
+    version="0.1.4",
     author="Gongfan Fang",
-    author_email="fgfvain97@zju.edu.cn",
+    author_email="fgf@zju.edu.cn",
     description="Fast and differentiable MS-SSIM and SSIM for pytorch.",
     long_description=long_description,
     long_description_content_type="text/markdown",
