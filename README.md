@@ -15,7 +15,7 @@ python setup.py install
 # Update
 
 ### _2019.12.10_  
-Negative results: [#11](https://github.com/VainF/pytorch-msssim/issues/11) and [#7](https://github.com/VainF/pytorch-msssim/issues/7)
+Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11) and [#7](https://github.com/VainF/pytorch-msssim/issues/7)
 
 The negative results or NaN results are caused by neative covariances of input images, **which can be avoided by using a larger K2 constant (e.g. 0.4)**. See 'tests/tests_negative_ssim.py' for more details.
 
