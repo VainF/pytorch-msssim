@@ -12,7 +12,7 @@ or
 python setup.py install
 ```
 
-# Update
+# Updates
 
 ### _2019.12.10_  
 Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11) and [#7](https://github.com/VainF/pytorch-msssim/issues/7)
