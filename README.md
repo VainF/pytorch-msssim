@@ -111,7 +111,9 @@ pytorch_msssim.ssim (K2=0.4):  0.0062743788585066795
 pytorch_msssim.ms_ssim (K2=0.4):  0.6563504934310913
 ```
 
-# An autoencoder trained with MS_SSIM
+### 3. train your autoencoder with MS_SSIM
+
+see 'tests/ae_example'
 
 ![results](https://github.com/VainF/Images/blob/master/pytorch_msssim/ae_ms_ssim.jpg)
 *left: original image, right: reconstructed image*
