@@ -32,7 +32,7 @@ Apply to 5D tensor: [#6](https://github.com/VainF/pytorch-msssim/issues/6)
 Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
 
 
-# Usage
+# Usages
 
 ```python
 from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
