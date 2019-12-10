@@ -57,9 +57,12 @@ ms_ssim_loss = 1 - ms_ssim_module(X, Y)
 # Tests
 
 <div>
-<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_0_ssim_1.0000.png"   width="20%"><figcaption>ssim=1.0000</figcaption>
-<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_50_ssim_0.4225.png"  width="20%"><figcaption>ssim=0.4225</figcaption>
-<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_100_ssim_0.1924.png"    width="20%"><figcaption>ssim=0.1924</figcaption>
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_0_ssim_1.0000.png"   width="20%">
+<figcaption>ssim=1.0000</figcaption>
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_50_ssim_0.4225.png"  width="20%">
+<figcaption>ssim=0.4225</figcaption>
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/simga_100_ssim_0.1924.png"    width="20%">
+<figcaption>ssim=0.1924</figcaption>
 </div>
 
 ```bash
