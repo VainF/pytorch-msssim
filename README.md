@@ -17,7 +17,7 @@ python setup.py install
 ### _2019.12.10_  
 Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11) and [#7](https://github.com/VainF/pytorch-msssim/issues/7)
 
-The negative results or NaN results are caused by negative covariances of input images, **which can be avoided by using a larger K2 constant (e.g. 0.4)**. See 'tests/tests_negative_ssim.py' for more details.
+The negative results or NaN results are caused by the negative covariances of input images, **which can be avoided by using a larger K2 constant (e.g. 0.4)**. See ['tests/tests_negative_ssim.py'](https://github.com/VainF/pytorch-msssim/blob/master/tests/tests_negative_ssim.py) for more details.
 
 ```python
 # set K2=0.4 for more stable results
@@ -117,7 +117,7 @@ pytorch_msssim.ms_ssim (K2=0.4):  0.6563504934310913
 
 ### 3. train your autoencoder with MS_SSIM
 
-see 'tests/ae_example'
+See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/ae_example)
 
 ![results](https://github.com/VainF/Images/blob/master/pytorch_msssim/ae_ms_ssim.jpg)
 *left: the original image, right: the reconstructed image*
