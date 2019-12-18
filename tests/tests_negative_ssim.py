@@ -19,5 +19,7 @@ print("pytorch_msssim.ms_ssim: ",ms_ssim( X, Y, data_range=1, size_average=False
 
 # use a larger K2
 print("\nLarger K2:")
+print( "skimage.measure.compare_ssim (K2=0.4): ", compare_ssim(X.squeeze(0).permute(1,2,0).numpy(), Y.squeeze(0).permute(1,2,0).numpy(), win_size=11, multichannel=True,
+                                    sigma=1.5, data_range=1, use_sample_covariance=False, gaussian_weights=True, K2=0.4) )
 print("pytorch_msssim.ssim (K2=0.4): ", ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.4)).item() )
 print("pytorch_msssim.ms_ssim (K2=0.4): ",ms_ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.4)).item() )
