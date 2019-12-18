@@ -106,13 +106,14 @@ python tests_negative_ssim.py
 The outputs:
 ```
 Negative ssim:
-skimage.measure.compare_ssim:  -0.96587564223943
-pytorch_msssim.ssim:  -0.9658759832382202
+skimage.measure.compare_ssim:  -0.9664662072647787
+pytorch_msssim.ssim:  -0.9664667844772339
 pytorch_msssim.ms_ssim:  nan
 
 Larger K2:
-pytorch_msssim.ssim (K2=0.4):  0.0062743788585066795
-pytorch_msssim.ms_ssim (K2=0.4):  0.6563504934310913
+skimage.measure.compare_ssim (K2=0.4):  0.00035834511522912283
+pytorch_msssim.ssim (K2=0.4):  0.00035815784940496087
+pytorch_msssim.ms_ssim (K2=0.4):  0.6010535955429077
 ```
 
 ### 3. train your autoencoder with MS_SSIM
