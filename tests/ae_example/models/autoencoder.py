@@ -5,7 +5,8 @@ import math
 
 from .gdn import GDN
 
-# https://arxiv.org/pdf/1611.01704.pdf without quantizer and entropy estimation
+# https://arxiv.org/pdf/1611.01704.pdf 
+# A simplfied version without quantization
 class AutoEncoder(nn.Module):
     def __init__(self, C=128, M=128, in_chan=3, out_chan=3):
         super(AutoEncoder, self).__init__()

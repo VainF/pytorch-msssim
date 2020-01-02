@@ -12,17 +12,52 @@ or
 python setup.py install
 ```
 
-# Updates
 
-### _2019.12.10_  
-Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11) and [#7](https://github.com/VainF/pytorch-msssim/issues/7)
+# Usage
 
-The negative results or NaN results are caused by the negative covariances of input images, **which can be avoided by using a larger K2 constant (e.g. 0.4)**. See ['tests/tests_negative_ssim.py'](https://github.com/VainF/pytorch-msssim/blob/master/tests/tests_negative_ssim.py) for more details.
+Calculations will be on the same device as input images.
+
+### 1. Basic Usage 
 
 ```python
-# set K2=0.4 for more stable results
-ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.4))
+from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
+# X: (N,3,H,W) a batch of non-negative RGB images (0~255)
+# Y: (N,3,H,W)  
+
+# calculate ssim & ms-ssim for each image
+ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
+ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
+
+# set 'size_average=True' to get a scalar value as loss.
+ssim_loss = 1 - ssim( X, Y, data_range=255, size_average=True) # return a scalar
+ms_ssim_loss = 1 - ms_ssim( X, Y, data_range=255, size_average=True )
+
+# reuse the gaussian kernel with SSIM & MS_SSIM. 
+ssim_module = SSIM(data_range=255, size_average=True, channel=3)
+ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3)
+
+ssim_loss = 1 - ssim_module(X, Y)
+ms_ssim_loss = 1 - ms_ssim_module(X, Y)
 ```
+
+### 2. Enable nonnegative_ssim to avoid NaN ms-ssim or negative ssim
+
+ssim responses will be negative when two images are entirely different. The negative ssim will lead to NaN ms-ssim, e.g., <img src="https://latex.codecogs.com/gif.latex?(-0.1)^{0.1333} = NaN" width="95"/>. It is recommended to set `nonnegative_ssim=True` to avoid NaN results if training with ms-ssim is unstable. See `tests/tests_negative_ssim.py` for more details.
+
+```python
+ssim_val = ssim( X, Y, data_range=255, size_average=False, nonnegative_ssim=True) 
+ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False, nonnegative_ssim=True)
+
+ssim_module = SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssim=True) 
+ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssim=True)
+```
+
+# Update
+
+### _2019.12.10_  
+Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11), [#7](https://github.com/VainF/pytorch-msssim/issues/7) and [#12](https://github.com/VainF/pytorch-msssim/issues/12)
+
+The negative results or NaN results are caused by the negative covariances of input images. You can enable nonnegative_ssim or use large K2 to avoid negative ssim or NaN ms-ssim.
 
 ### _2019.8.15_  
 Apply to 5D tensor: [#6](https://github.com/VainF/pytorch-msssim/issues/6)
@@ -31,30 +66,6 @@ Apply to 5D tensor: [#6](https://github.com/VainF/pytorch-msssim/issues/6)
 ### _2019.6.17_  
 Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
 
-
-# Usages
-
-Calculations will be on the same device as input images.
-
-```python
-from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
-# X: (N,3,H,W) a batch of non-negative RGB images (0~255)
-# Y: (N,3,H,W)  
-
-ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
-ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
-
-# set 'size_average=True' to get a scalar value as loss.
-ssim_loss = 1 - ssim( X, Y, data_range=255, size_average=True) # return a scalar
-ms_ssim_loss = 1 - ms_ssim( X, Y, data_range=255, size_average=True )
-
-# reuse windows with SSIM & MS_SSIM. 
-ssim_module = SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
-ms_ssim_module = MS_SSIM(win_size=11, win_sigma=1.5, data_range=255, size_average=True, channel=3)
-
-ssim_loss = 1 - ssim_module(X, Y)
-ms_ssim_loss = 1 - ms_ssim_module(X, Y)
-```
 
 # Tests
 
@@ -106,14 +117,18 @@ python tests_negative_ssim.py
 The outputs:
 ```
 Negative ssim:
-skimage.measure.compare_ssim:  -0.9664662072647787
-pytorch_msssim.ssim:  -0.9664667844772339
+skimage.measure.compare_ssim:  -0.967184334545359
+pytorch_msssim.ssim:  -0.9671849608421326
 pytorch_msssim.ms_ssim:  nan
 
+set nonnegative_ssim=True:
+pytorch_msssim.ssim (nonnegative_ssim=True):  0.036789003759622574
+pytorch_msssim.ms_ssim (nonnegative_ssim=True):  0.7140688896179199
+
 Larger K2:
-skimage.measure.compare_ssim (K2=0.4):  0.00035834511522912283
-pytorch_msssim.ssim (K2=0.4):  0.00035815784940496087
-pytorch_msssim.ms_ssim (K2=0.4):  0.6010535955429077
+skimage.measure.compare_ssim (K2=0.4):  0.005528026494324062
+pytorch_msssim.ssim (K2=0.4):  0.005527835804969072
+pytorch_msssim.ms_ssim (K2=0.4):  0.6571949124336243
 ```
 
 ### 3. train your autoencoder with MS_SSIM

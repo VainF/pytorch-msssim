@@ -16,6 +16,10 @@ print( "skimage.measure.compare_ssim: ", compare_ssim(X.squeeze(0).permute(1,2,0
 print("pytorch_msssim.ssim: ", ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.03)).item() )
 print("pytorch_msssim.ms_ssim: ",ms_ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.03)).item() )
 
+# Set nonnegative_ssim=True
+print("\nset nonnegative_ssim=True:")
+print("pytorch_msssim.ssim (nonnegative_ssim=True): ", ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.4), nonnegative_ssim=True).item() )
+print("pytorch_msssim.ms_ssim (nonnegative_ssim=True): ",ms_ssim( X, Y, data_range=1, size_average=False, K=(0.01, 0.4), nonnegative_ssim=True).item() )
 
 # use a larger K2
 print("\nLarger K2:")

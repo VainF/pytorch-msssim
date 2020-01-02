@@ -36,7 +36,7 @@ def gaussian_filter(input, win):
     return out
 
 
-def _ssim(X, Y, win, data_range=255, size_average=True, full=False, K=(0.01,0.03)):
+def _ssim(X, Y, win, data_range=255, size_average=True, full=False, K=(0.01,0.03), nonnegative_ssim=False):
     r""" Calculate ssim index for X and Y
     Args:
         X (torch.Tensor): images
@@ -45,6 +45,7 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False, K=(0.01,0.03
         data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
         size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
         full (bool, optional): return sc or not
+        nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid negative results.
 
     Returns:
         torch.Tensor: ssim results
@@ -70,6 +71,8 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False, K=(0.01,0.03
     sigma12   = compensation * ( gaussian_filter(X * Y, win) - mu1_mu2 )
 
     cs_map = (2 * sigma12 + C2) / (sigma1_sq + sigma2_sq + C2) # set alpha=beta=gamma=1
+    if nonnegative_ssim:
+        cs_map = F.relu( cs_map, inplace=True )
     ssim_map = ((2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)) * cs_map
 
     if size_average:
@@ -85,7 +88,7 @@ def _ssim(X, Y, win, data_range=255, size_average=True, full=False, K=(0.01,0.03
         return ssim_val
 
 
-def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, K=(0.01, 0.03)):
+def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, K=(0.01, 0.03), nonnegative_ssim=False):
     r""" interface of ssim
     Args:
         X (torch.Tensor): a batch of images, (N,C,H,W)
@@ -97,6 +100,7 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
         size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
         full (bool, optional): return sc or not
         K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
+        nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid negative results.
 
     Returns:
         torch.Tensor: ssim results
@@ -125,7 +129,7 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
                          win=win,
                          data_range=data_range,
                          size_average=False,
-                         full=True, K=K)
+                         full=True, K=K, nonnegative_ssim=nonnegative_ssim)
     if size_average:
         ssim_val = ssim_val.mean()
         cs = cs.mean()
@@ -136,7 +140,7 @@ def ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_averag
         return ssim_val
 
 
-def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, weights=None, K=(0.01, 0.03)):
+def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_average=True, full=False, weights=None, K=(0.01, 0.03), nonnegative_ssim=False):
     r""" interface of ms-ssim
     Args:
         X (torch.Tensor): a batch of images, (N,C,H,W)
@@ -149,7 +153,7 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
         full (bool, optional): return sc or not
         weights (list, optional): weights for different levels
         K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
-
+        nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid NaN results.
     Returns:
         torch.Tensor: ms-ssim results
     """
@@ -183,7 +187,7 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
                              win=win,
                              data_range=data_range,
                              size_average=False,
-                             full=True, K=K)
+                             full=True, K=K, nonnegative_ssim=nonnegative_ssim)
         mcs.append(cs)
 
         padding = (X.shape[2] % 2, X.shape[3] % 2)
@@ -201,7 +205,7 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
 
 
 class SSIM(torch.nn.Module):
-    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, K=(0.01, 0.03)):
+    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, K=(0.01, 0.03), nonnegative_ssim=False):
         r""" class for ssim
         Args:
             win_size: (int, optional): the size of gauss kernel
@@ -210,6 +214,7 @@ class SSIM(torch.nn.Module):
             size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
             channel (int, optional): input channels (default: 3)
             K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
+            nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid negative results.
         """
 
         super(SSIM, self).__init__()
@@ -218,13 +223,14 @@ class SSIM(torch.nn.Module):
         self.size_average = size_average
         self.data_range = data_range
         self.K = K
+        self.nonnegative_ssim = nonnegative_ssim
 
     def forward(self, X, Y):
-        return ssim(X, Y, win=self.win, data_range=self.data_range, size_average=self.size_average, K=self.K)
+        return ssim(X, Y, win=self.win, data_range=self.data_range, size_average=self.size_average, K=self.K, nonnegative_ssim=self.nonnegative_ssim)
 
     
 class MS_SSIM(torch.nn.Module):
-    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, weights=None, K=(0.01, 0.03)):
+    def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, weights=None, K=(0.01, 0.03), nonnegative_ssim=False):
         r""" class for ms-ssim
         Args:
             win_size: (int, optional): the size of gauss kernel
@@ -234,6 +240,7 @@ class MS_SSIM(torch.nn.Module):
             channel (int, optional): input channels (default: 3)
             weights (list, optional): weights for different levels
             K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
+            nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid NaN results.
         """
 
         super(MS_SSIM, self).__init__()
@@ -243,6 +250,7 @@ class MS_SSIM(torch.nn.Module):
         self.data_range = data_range
         self.weights = weights
         self.K = K
+        self.nonnegative_ssim = nonnegative_ssim
 
     def forward(self, X, Y):
-        return ms_ssim(X, Y, win=self.win, size_average=self.size_average, data_range=self.data_range, weights=self.weights, K=self.K)
+        return ms_ssim(X, Y, win=self.win, size_average=self.size_average, data_range=self.data_range, weights=self.weights, K=self.K, nonnegative_ssim=self.nonnegative_ssim)
