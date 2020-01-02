@@ -3,3 +3,6 @@ __pycache__
 *.png
 *.pt
 data
+build
+dist
+pytorch_msssim.egg-info
