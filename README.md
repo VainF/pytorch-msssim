@@ -2,7 +2,7 @@
 
 Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 
-# Install
+# Installation
 
 ```bash
 pip install pytorch-msssim
@@ -62,7 +62,7 @@ Apply to 5D tensor: [#6](https://github.com/VainF/pytorch-msssim/issues/6)
 Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
 
 
-# Tests
+# Tests and Examples
 
 ```bash
 cd tests
@@ -101,8 +101,6 @@ Pass
 ====> Batch
 Pass
 ```
-
-
 
 ### 2. Avoid negative or NaN results
 ```bash
