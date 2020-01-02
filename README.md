@@ -7,11 +7,6 @@ Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 ```bash
 pip install pytorch-msssim
 ```
-or
-```bash
-python setup.py install
-```
-
 
 # Usage
 
