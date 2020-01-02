@@ -1,3 +1,5 @@
 __pycache__
 .vscode
 *.png
+*.pt
+data
