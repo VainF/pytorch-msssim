@@ -42,7 +42,7 @@ ms_ssim_loss = 1 - ms_ssim_module(X, Y)
 
 ### 2. Enable nonnegative_ssim to avoid NaN ms-ssim or negative ssim
 
-ssim responses will be negative when two images are entirely different. The negative ssim will lead to NaN ms-ssim, e.g., <img src="https://latex.codecogs.com/gif.latex?(-0.1)^{0.1333} = NaN" width="95"/>. It is recommended to set `nonnegative_ssim=True` to avoid NaN results if training with ms-ssim is unstable. See `tests/tests_negative_ssim.py` for more details.
+ssim responses will be negative when two images are entirely different. The negative ssim will lead to NaN ms-ssim, e.g., (-0.1)^0.1333 => NaN. It is recommended to set `nonnegative_ssim=True` to avoid NaN results if training with ms-ssim is unstable. See `tests/tests_negative_ssim.py` for more details.
 
 ```python
 ssim_val = ssim( X, Y, data_range=255, size_average=False, nonnegative_ssim=True) 
