@@ -47,7 +47,7 @@ ssim_module = SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssi
 ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssim=True)
 ```
 
-# Update
+# Updates
 
 ### _2019.12.10_  
 Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11), [#7](https://github.com/VainF/pytorch-msssim/issues/7) and [#12](https://github.com/VainF/pytorch-msssim/issues/12)
@@ -124,7 +124,7 @@ pytorch_msssim.ssim (K2=0.4):  0.005527835804969072
 pytorch_msssim.ms_ssim (K2=0.4):  0.6571949124336243
 ```
 
-### 3. train your autoencoder with MS_SSIM
+### 3. Train your autoencoder with MS_SSIM
 
 See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/ae_example)
 
