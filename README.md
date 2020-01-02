@@ -2,6 +2,16 @@
 
 Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 
+<div>
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/lcs.png" width="30%">
+
+Structural Similarity (SSIM):   
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/ssim.png" width="50%">
+
+Multi-Scale Structural Similarity (MS-SSIM):  
+<img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/ms-ssim.png" width="50%">
+</div>
+
 # Installation
 
 ```bash
