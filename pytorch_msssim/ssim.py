@@ -169,6 +169,10 @@ def ms_ssim(X, Y, win_size=11, win_sigma=1.5, win=None, data_range=255, size_ave
     if not (win_size % 2 == 1):
         raise ValueError('Window size must be odd.')
 
+    smaller_side = min( X.shape[-2:] )
+    assert smaller_side > (win_size-1) * (2**4), \
+         "Image size should be larger than %d due to the 4 downsamplings in ms-ssim"% ((win_size-1) * (2**4))
+
     if weights is None:
         weights = torch.FloatTensor(
             [0.0448, 0.2856, 0.3001, 0.2363, 0.1333]).to(X.device, dtype=X.dtype)
