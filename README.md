@@ -45,8 +45,18 @@ ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3)
 ssim_loss = 1 - ssim_module(X, Y)
 ms_ssim_loss = 1 - ms_ssim_module(X, Y)
 ```
+### 2. Normalized input
+If you need to calculate MS-SSIM/SSIM on normalized images, please denormalize them to the range of [0, 1] or [0, 255] first.
 
-### 2. Enable nonnegative_ssim to avoid NaN ms-ssim or negative ssim
+```python
+# X: (N,3,H,W) a batch of normalized images (-1 ~ 1)
+# Y: (N,3,H,W)  
+X = (X + 1) / 2  # [-1, 1] => [0, 1]
+Y = (Y + 1) / 2  
+ms_ssim_val = ms_ssim( X, Y, data_range=1, size_average=False ) #(N,)
+```
+
+### 3. Enable nonnegative_ssim to avoid NaN ms-ssim or negative ssim
 
 Ssim responses will be negative if two images are entirely different. The negative ssim will lead to NaN ms-ssim results, e.g., (-0.1)^0.1333 => NaN. It is recommended to set `nonnegative_ssim=True` to avoid NaN results for more stable training with ms-ssim. See `tests/tests_negative_ssim.py` for more details.
 
