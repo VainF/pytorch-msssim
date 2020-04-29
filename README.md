@@ -146,5 +146,5 @@ See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tes
 [https://github.com/jorge-pessoa/pytorch-msssim](https://github.com/jorge-pessoa/pytorch-msssim)  
 [https://ece.uwaterloo.ca/~z70wang/research/ssim/](https://ece.uwaterloo.ca/~z70wang/research/ssim/)  
 [https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf](https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf)  
-[Matlab Code](https://ece.uwaterloo.ca/~z70wang/research/iwssim/) 
+[Matlab Code](https://ece.uwaterloo.ca/~z70wang/research/iwssim/)   
 [ssim & ms-ssim form tensorflow](https://github.com/tensorflow/tensorflow/blob/v2.1.0/tensorflow/python/ops/image_ops_impl.py#L3314-L3438) 
