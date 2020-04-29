@@ -232,7 +232,7 @@ class SSIM(torch.nn.Module):
     def forward(self, X, Y):
         return ssim(X, Y, win=self.win, data_range=self.data_range, size_average=self.size_average, K=self.K, nonnegative_ssim=self.nonnegative_ssim)
 
-    
+
 class MS_SSIM(torch.nn.Module):
     def __init__(self, win_size=11, win_sigma=1.5, data_range=None, size_average=True, channel=3, weights=None, K=(0.01, 0.03), nonnegative_ssim=False):
         r""" class for ms-ssim
@@ -248,6 +248,7 @@ class MS_SSIM(torch.nn.Module):
         """
 
         super(MS_SSIM, self).__init__()
+        self.win_size = win_size
         self.win = _fspecial_gauss_1d(
             win_size, win_sigma).repeat(channel, 1, 1, 1)
         self.size_average = size_average
@@ -257,4 +258,4 @@ class MS_SSIM(torch.nn.Module):
         self.nonnegative_ssim = nonnegative_ssim
 
     def forward(self, X, Y):
-        return ms_ssim(X, Y, win=self.win, size_average=self.size_average, data_range=self.data_range, weights=self.weights, K=self.K, nonnegative_ssim=self.nonnegative_ssim)
+        return ms_ssim(X, Y, win=self.win, win_size=self.win_size, size_average=self.size_average, data_range=self.data_range, weights=self.weights, K=self.K, nonnegative_ssim=self.nonnegative_ssim)
