@@ -2,7 +2,6 @@
 
 Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
 
-
 <div>
 <img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/lcs.png" width="25%">
 
@@ -12,6 +11,12 @@ Structural Similarity (SSIM):
 Multi-Scale Structural Similarity (MS-SSIM):  
 <img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/ms-ssim.png" width="55%">
 </div>
+
+# Updates
+
+### _2020.04.30_  
+
+Now (v0.2), **ssim & ms-ssim are calculated in the same way as tensorflow and skimage**, except that zero padding is used during downsampling rather than symmetric padding (there is no symmetric padding in pytorch). The comparison results between pytorch-msssim, tensorflow and skimage can be found in the Tests section.
 
 # Installation
 
@@ -56,31 +61,11 @@ Y = (Y + 1) / 2
 ms_ssim_val = ms_ssim( X, Y, data_range=1, size_average=False ) #(N,)
 ```
 
-### 3. Enable nonnegative_ssim to avoid NaN ms-ssim or negative ssim
+### 3. Enable nonnegative_ssim to avoid negative ssim
 
-Ssim responses will be negative if two images are entirely different. The negative ssim will lead to NaN ms-ssim results, e.g., (-0.1)^0.1333 => NaN. It is recommended to set `nonnegative_ssim=True` to avoid NaN results for more stable training with ms-ssim. See `tests/tests_negative_ssim.py` for more details.
+For ssim, it is recommended to set `nonnegative_ssim=True` to avoid negative results. However, the option is set to `False` to get consistent results as tensorflow and skimage.
 
-```python
-ssim_val = ssim( X, Y, data_range=255, size_average=False, nonnegative_ssim=True) 
-ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False, nonnegative_ssim=True)
-
-ssim_module = SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssim=True) 
-ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3, nonnegative_ssim=True)
-```
-
-# Updates
-
-### _2019.12.10_  
-Negative or NaN results: [#11](https://github.com/VainF/pytorch-msssim/issues/11), [#7](https://github.com/VainF/pytorch-msssim/issues/7) and [#12](https://github.com/VainF/pytorch-msssim/issues/12)
-
-The negative results or NaN results are caused by the negative covariances of input images. You can enable nonnegative_ssim or use large K2 to avoid negative ssim or NaN ms-ssim.
-
-### _2019.8.15_  
-Apply to 5D tensor: [#6](https://github.com/VainF/pytorch-msssim/issues/6)
-
-
-### _2019.6.17_  
-Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://github.com/VainF/pytorch-msssim/issues/3)
+For ms-ssim, this option is forced to be True to avoid NaN results.
 
 
 # Tests and Examples
@@ -88,10 +73,56 @@ Now it is faster than compare_ssim thanks to [One-sixth's contribution](https://
 ```bash
 cd tests
 ```
-### 1. Compared with [skimage.measure.compare_ssim](https://scikit-image.org/docs/dev/api/skimage.measure.html#skimage.measure.compare_ssim) on CPU.
+### 1. Comparions between pytorch-msssim, skimage and tensorflow on CPU.
 
 ```bash
-python tests.py
+python tests_comparisons_tf_skimage.py 
+```
+
+Outputs:
+
+```
+Downloading test image...
+===================================
+             Test SSIM
+===================================
+====> Single Image
+Repeat 100 times
+sigma=0.0 ssim_skimage: 1.000000 (147.2605 ms), ssim_tf=1.000000 (343.4146 ms), ssim_torch=1.000000 (92.9151 ms)
+sigma=10.0 ssim_skimage: 0.932423 (147.5198 ms), ssim_tf=0.932661 (343.5191 ms), ssim_torch=0.932421 (95.6283 ms)
+sigma=20.0 ssim_skimage: 0.785744 (152.6441 ms), ssim_tf=0.785733 (343.4085 ms), ssim_torch=0.785738 (87.5639 ms)
+sigma=30.0 ssim_skimage: 0.636902 (145.5763 ms), ssim_tf=0.636902 (343.5312 ms), ssim_torch=0.636895 (90.4084 ms)
+sigma=40.0 ssim_skimage: 0.515798 (147.3798 ms), ssim_tf=0.515801 (344.8978 ms), ssim_torch=0.515791 (96.4440 ms)
+sigma=50.0 ssim_skimage: 0.422011 (148.2900 ms), ssim_tf=0.422007 (345.4076 ms), ssim_torch=0.422005 (86.3799 ms)
+sigma=60.0 ssim_skimage: 0.351139 (146.2039 ms), ssim_tf=0.351139 (343.4428 ms), ssim_torch=0.351133 (93.3445 ms)
+sigma=70.0 ssim_skimage: 0.296336 (145.5341 ms), ssim_tf=0.296337 (345.2255 ms), ssim_torch=0.296331 (92.6771 ms)
+sigma=80.0 ssim_skimage: 0.253328 (147.6655 ms), ssim_tf=0.253328 (343.1386 ms), ssim_torch=0.253324 (82.5985 ms)
+sigma=90.0 ssim_skimage: 0.219404 (142.6025 ms), ssim_tf=0.219405 (345.8275 ms), ssim_torch=0.219400 (100.9946 ms)
+sigma=100.0 ssim_skimage: 0.192681 (144.5597 ms), ssim_tf=0.192682 (346.5489 ms), ssim_torch=0.192678 (85.0229 ms)
+Pass!
+====> Batch
+Pass!
+
+
+===================================
+             Test MS-SSIM
+===================================
+====> Single Image
+Repeat 100 times
+sigma=0.0 msssim_tf=1.000000 (671.5363 ms), msssim_torch=1.000000 (125.1403 ms)
+sigma=10.0 msssim_tf=0.991137 (669.0296 ms), msssim_torch=0.991086 (113.4078 ms)
+sigma=20.0 msssim_tf=0.967292 (670.5530 ms), msssim_torch=0.967281 (107.6428 ms)
+sigma=30.0 msssim_tf=0.934875 (668.7717 ms), msssim_torch=0.934875 (111.3334 ms)
+sigma=40.0 msssim_tf=0.897660 (669.0801 ms), msssim_torch=0.897658 (107.3700 ms)
+sigma=50.0 msssim_tf=0.858956 (671.4629 ms), msssim_torch=0.858954 (100.9959 ms)
+sigma=60.0 msssim_tf=0.820477 (670.5424 ms), msssim_torch=0.820475 (103.4489 ms)
+sigma=70.0 msssim_tf=0.783511 (671.9357 ms), msssim_torch=0.783507 (113.9048 ms)
+sigma=80.0 msssim_tf=0.749522 (672.3925 ms), msssim_torch=0.749518 (120.3891 ms)
+sigma=90.0 msssim_tf=0.716221 (672.9066 ms), msssim_torch=0.716217 (118.3788 ms)
+sigma=100.0 msssim_tf=0.684958 (675.2075 ms), msssim_torch=0.684953 (117.9481 ms)
+Pass
+====> Batch
+Pass
 ```
 
 <div>
@@ -103,49 +134,7 @@ python tests.py
 <figcaption>ssim=0.1924</figcaption>
 </div>
 
-The outputs:
-```
-Downloading test image...
-====> Single Image
-sigma=0.000000 compare_ssim=1.000000 (275.226831 ms) ssim_torch=1.000000 (462.517738 ms)
-sigma=10.000000 compare_ssim=0.932497 (389.491558 ms) ssim_torch=0.932494 (63.863516 ms)
-sigma=20.000000 compare_ssim=0.785664 (266.695976 ms) ssim_torch=0.785658 (46.617031 ms)
-sigma=30.000000 compare_ssim=0.637369 (275.762081 ms) ssim_torch=0.637362 (55.842876 ms)
-sigma=40.000000 compare_ssim=0.515707 (236.553907 ms) ssim_torch=0.515700 (45.801163 ms)
-sigma=50.000000 compare_ssim=0.422497 (264.705896 ms) ssim_torch=0.422491 (46.895742 ms)
-sigma=60.000000 compare_ssim=0.350707 (234.748363 ms) ssim_torch=0.350702 (44.762611 ms)
-sigma=70.000000 compare_ssim=0.295998 (210.025072 ms) ssim_torch=0.295993 (45.758247 ms)
-sigma=80.000000 compare_ssim=0.253552 (250.259876 ms) ssim_torch=0.253547 (96.461058 ms)
-sigma=90.000000 compare_ssim=0.219344 (263.813257 ms) ssim_torch=0.219340 (49.159765 ms)
-sigma=100.000000 compare_ssim=0.192421 (258.941889 ms) ssim_torch=0.192418 (47.627449 ms)
-Pass
-====> Batch
-Pass
-```
-
-### 2. Avoid negative or NaN results
-```bash
-python tests_negative_ssim.py
-```
-
-The outputs:
-```
-Negative ssim:
-skimage.measure.compare_ssim:  -0.967184334545359
-pytorch_msssim.ssim:  -0.9671849608421326
-pytorch_msssim.ms_ssim:  nan
-
-set nonnegative_ssim=True:
-pytorch_msssim.ssim (nonnegative_ssim=True):  0.036789003759622574
-pytorch_msssim.ms_ssim (nonnegative_ssim=True):  0.7140688896179199
-
-Larger K2:
-skimage.measure.compare_ssim (K2=0.4):  0.005528026494324062
-pytorch_msssim.ssim (K2=0.4):  0.005527835804969072
-pytorch_msssim.ms_ssim (K2=0.4):  0.6571949124336243
-```
-
-### 3. Train your autoencoder with MS_SSIM
+### 2. Train your autoencoder with MS_SSIM
 
 See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/ae_example)
 
@@ -157,4 +146,5 @@ See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tes
 [https://github.com/jorge-pessoa/pytorch-msssim](https://github.com/jorge-pessoa/pytorch-msssim)  
 [https://ece.uwaterloo.ca/~z70wang/research/ssim/](https://ece.uwaterloo.ca/~z70wang/research/ssim/)  
 [https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf](https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf)  
-[Matlab Code](https://ece.uwaterloo.ca/~z70wang/research/iwssim/)  
+[Matlab Code](https://ece.uwaterloo.ca/~z70wang/research/iwssim/) 
+[ssim & ms-ssim form tensorflow](https://github.com/tensorflow/tensorflow/blob/v2.1.0/tensorflow/python/ops/image_ops_impl.py#L3314-L3438) 
