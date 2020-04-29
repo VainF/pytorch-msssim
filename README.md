@@ -76,7 +76,11 @@ cd tests
 ### 1. Comparions between pytorch-msssim, skimage and tensorflow on CPU.
 
 ```bash
+# requires tf2
 python tests_comparisons_tf_skimage.py 
+
+# or skimage only
+# python tests_comparisons_skimage.py 
 ```
 
 Outputs:
