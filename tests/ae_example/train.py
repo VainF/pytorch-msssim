@@ -83,7 +83,7 @@ def main():
     if opts.loss_type=='ssim':
         criterion = SSIM_Loss(data_range=1.0, size_average=True, channel=3)
     else:
-        criterion = MS_SSIM_Loss(data_range=1.0, size_average=True, channel=3, nonnegative_ssim=True)
+        criterion = MS_SSIM_Loss(data_range=1.0, size_average=True, channel=3)
 
     #==========   Train Loop   ==========#
     for cur_epoch in range(opts.total_epochs):
