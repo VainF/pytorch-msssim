@@ -51,7 +51,7 @@ if __name__ == '__main__':
         ssim_torch = ssim_torch.numpy()
         single_image_ssim.append(ssim_torch)
 
-        print("sigma=%f ssim_skimage:%f (%f ms) ssim_torch=%f (%f ms)" % (
+        print("sigma=%f ssim_skimage=%f (%f ms) ssim_torch=%f (%f ms)" % (
             sigma, ssim_skimage, time_skimage*1000, ssim_torch, time_torch*1000))
 
         #Image.fromarray( img_noise.astype('uint8') ).save('simga_%d_ssim_%.4f.png'%(sigma, ssim_torch.item()))
