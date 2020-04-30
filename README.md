@@ -140,7 +140,7 @@ Pass
 
 ### 2. MS_SSIM as loss function
 
-See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/tests_loss.py) for more details about how to use ssim or ms_ssim as loss functions
+See ['tests/tests_loss.py'](https://github.com/VainF/pytorch-msssim/tree/master/tests/tests_loss.py) for more details about how to use ssim or ms_ssim as loss functions
 
 ### 3. AutoEncoder
 
