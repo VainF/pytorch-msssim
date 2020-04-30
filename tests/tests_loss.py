@@ -1,3 +1,4 @@
+# Adapted from https://github.com/Po-Hsun-Su/pytorch-ssim/blob/master/max_ssim.py
 
 import torch
 from torch.autograd import Variable
@@ -23,14 +24,14 @@ img2 = Variable( img2,  requires_grad=True)
 ssim_value = ssim(img1, img2).item()
 print("Initial ssim:", ssim_value)
 
-ssim_loss = MS_SSIM(win_size=11, win_sigma=1.5, data_range=1, size_average=True, channel=1)
+ssim_loss = SSIM(win_size=11, win_sigma=1.5, data_range=1, size_average=True, channel=1)
 
 optimizer = optim.Adam([img2], lr=0.01)
 
-while ssim_value < 1.0:
+while ssim_value < 0.9999:
     optimizer.zero_grad()
-    ssim_out = 1-ssim_loss(img1, img2)
-    ssim_out.backward()
+    _ssim_loss = 1-ssim_loss(img1, img2)
+    _ssim_loss.backward()
     optimizer.step()
 
     ssim_value = ssim(img1, img2).item()
