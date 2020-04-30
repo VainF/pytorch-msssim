@@ -92,17 +92,17 @@ Downloading test image...
 ===================================
 ====> Single Image
 Repeat 100 times
-sigma=0.0 ssim_skimage: 1.000000 (147.2605 ms), ssim_tf=1.000000 (343.4146 ms), ssim_torch=1.000000 (92.9151 ms)
-sigma=10.0 ssim_skimage: 0.932423 (147.5198 ms), ssim_tf=0.932661 (343.5191 ms), ssim_torch=0.932421 (95.6283 ms)
-sigma=20.0 ssim_skimage: 0.785744 (152.6441 ms), ssim_tf=0.785733 (343.4085 ms), ssim_torch=0.785738 (87.5639 ms)
-sigma=30.0 ssim_skimage: 0.636902 (145.5763 ms), ssim_tf=0.636902 (343.5312 ms), ssim_torch=0.636895 (90.4084 ms)
-sigma=40.0 ssim_skimage: 0.515798 (147.3798 ms), ssim_tf=0.515801 (344.8978 ms), ssim_torch=0.515791 (96.4440 ms)
-sigma=50.0 ssim_skimage: 0.422011 (148.2900 ms), ssim_tf=0.422007 (345.4076 ms), ssim_torch=0.422005 (86.3799 ms)
-sigma=60.0 ssim_skimage: 0.351139 (146.2039 ms), ssim_tf=0.351139 (343.4428 ms), ssim_torch=0.351133 (93.3445 ms)
-sigma=70.0 ssim_skimage: 0.296336 (145.5341 ms), ssim_tf=0.296337 (345.2255 ms), ssim_torch=0.296331 (92.6771 ms)
-sigma=80.0 ssim_skimage: 0.253328 (147.6655 ms), ssim_tf=0.253328 (343.1386 ms), ssim_torch=0.253324 (82.5985 ms)
-sigma=90.0 ssim_skimage: 0.219404 (142.6025 ms), ssim_tf=0.219405 (345.8275 ms), ssim_torch=0.219400 (100.9946 ms)
-sigma=100.0 ssim_skimage: 0.192681 (144.5597 ms), ssim_tf=0.192682 (346.5489 ms), ssim_torch=0.192678 (85.0229 ms)
+sigma=0.0 ssim_skimage=1.000000 (147.2605 ms), ssim_tf=1.000000 (343.4146 ms), ssim_torch=1.000000 (92.9151 ms)
+sigma=10.0 ssim_skimage=0.932423 (147.5198 ms), ssim_tf=0.932661 (343.5191 ms), ssim_torch=0.932421 (95.6283 ms)
+sigma=20.0 ssim_skimage=0.785744 (152.6441 ms), ssim_tf=0.785733 (343.4085 ms), ssim_torch=0.785738 (87.5639 ms)
+sigma=30.0 ssim_skimage=0.636902 (145.5763 ms), ssim_tf=0.636902 (343.5312 ms), ssim_torch=0.636895 (90.4084 ms)
+sigma=40.0 ssim_skimage=0.515798 (147.3798 ms), ssim_tf=0.515801 (344.8978 ms), ssim_torch=0.515791 (96.4440 ms)
+sigma=50.0 ssim_skimage=0.422011 (148.2900 ms), ssim_tf=0.422007 (345.4076 ms), ssim_torch=0.422005 (86.3799 ms)
+sigma=60.0 ssim_skimage=0.351139 (146.2039 ms), ssim_tf=0.351139 (343.4428 ms), ssim_torch=0.351133 (93.3445 ms)
+sigma=70.0 ssim_skimage=0.296336 (145.5341 ms), ssim_tf=0.296337 (345.2255 ms), ssim_torch=0.296331 (92.6771 ms)
+sigma=80.0 ssim_skimage=0.253328 (147.6655 ms), ssim_tf=0.253328 (343.1386 ms), ssim_torch=0.253324 (82.5985 ms)
+sigma=90.0 ssim_skimage=0.219404 (142.6025 ms), ssim_tf=0.219405 (345.8275 ms), ssim_torch=0.219400 (100.9946 ms)
+sigma=100.0 ssim_skimage=0.192681 (144.5597 ms), ssim_tf=0.192682 (346.5489 ms), ssim_torch=0.192678 (85.0229 ms)
 Pass!
 ====> Batch
 Pass!
