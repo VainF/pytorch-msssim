@@ -61,7 +61,7 @@ Y = (Y + 1) / 2
 ms_ssim_val = ms_ssim( X, Y, data_range=1, size_average=False ) #(N,)
 ```
 
-### 3. Enable nonnegative_ssim to avoid negative ssim
+### 3. Enable nonnegative_ssim
 
 For ssim, it is recommended to set `nonnegative_ssim=True` to avoid negative results. However, the option is set to `False` to get consistent results as tensorflow and skimage.
 
