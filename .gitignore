@@ -1,6 +1,7 @@
 __pycache__
 .vscode
-*.png
+kodim10.png
+result.png
 *.pt
 data
 build

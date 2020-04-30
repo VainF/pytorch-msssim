@@ -16,7 +16,7 @@ Multi-Scale Structural Similarity (MS-SSIM):
 
 ### _2020.04.30_  
 
-Now (v0.2), **ssim & ms-ssim are calculated in the same way as tensorflow and skimage**, except that zero padding is used during downsampling rather than symmetric padding (there is no symmetric padding in pytorch). The comparison results between pytorch-msssim, tensorflow and skimage can be found in the Tests section.
+Now (v0.2), **ssim & ms-ssim are calculated in the same way as tensorflow and skimage**, except that zero padding rather than symmetric padding is used during downsampling (there is no symmetric padding in pytorch). The comparison results between pytorch-msssim, tensorflow and skimage can be found in the Tests section.
 
 # Installation
 
@@ -39,7 +39,7 @@ from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
 ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
 ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
 
-# set 'size_average=True' to get a scalar value as loss.
+# set 'size_average=True' to get a scalar value as loss. see tests/tests_loss.py for more details
 ssim_loss = 1 - ssim( X, Y, data_range=255, size_average=True) # return a scalar
 ms_ssim_loss = 1 - ms_ssim( X, Y, data_range=255, size_average=True )
 
@@ -138,7 +138,11 @@ Pass
 <figcaption>ssim=0.1924</figcaption>
 </div>
 
-### 2. Train your autoencoder with MS_SSIM
+### 2. MS_SSIM as loss function
+
+See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/tests_loss.py) for more details about how to use ssim or ms_ssim as loss functions
+
+### 3. AutoEncoder
 
 See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tests/ae_example)
 
@@ -151,4 +155,4 @@ See ['tests/ae_example'](https://github.com/VainF/pytorch-msssim/tree/master/tes
 [https://ece.uwaterloo.ca/~z70wang/research/ssim/](https://ece.uwaterloo.ca/~z70wang/research/ssim/)  
 [https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf](https://ece.uwaterloo.ca/~z70wang/publications/msssim.pdf)  
 [Matlab Code](https://ece.uwaterloo.ca/~z70wang/research/iwssim/)   
-[ssim & ms-ssim form tensorflow](https://github.com/tensorflow/tensorflow/blob/v2.1.0/tensorflow/python/ops/image_ops_impl.py#L3314-L3438) 
+[ssim & ms-ssim from tensorflow](https://github.com/tensorflow/tensorflow/blob/v2.1.0/tensorflow/python/ops/image_ops_impl.py#L3314-L3438) 
