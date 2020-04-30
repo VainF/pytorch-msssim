@@ -52,7 +52,6 @@ def _ssim(X, Y,
         win (torch.Tensor): 1-D gauss kernel
         data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
         size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
-        nonnegative_ssim (bool, optional): force the ssim response to be nonnegative to avoid negative results.
 
     Returns:
         torch.Tensor: ssim results.
