@@ -68,7 +68,7 @@ if __name__ == '__main__':
         single_image_ssim.append(ssim_torch)
         ssim_tf = ssim_tf.numpy()
 
-        print("sigma=%.1f ssim_skimage: %.6f (%.4f ms), ssim_tf=%.6f (%.4f ms), ssim_torch=%.6f (%.4f ms)" % (
+        print("sigma=%.1f ssim_skimage=%.6f (%.4f ms), ssim_tf=%.6f (%.4f ms), ssim_torch=%.6f (%.4f ms)" % (
             sigma, ssim_skimage, time_skimage*1000, ssim_tf, time_tf*1000, ssim_torch, time_torch*1000))
         assert (np.allclose(ssim_torch, ssim_skimage, atol=5e-4))
         assert (np.allclose(ssim_torch, ssim_tf, atol=5e-4))
