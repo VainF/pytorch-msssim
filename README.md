@@ -63,7 +63,7 @@ ms_ssim_val = ms_ssim( X, Y, data_range=1, size_average=False ) #(N,)
 
 ### 3. Enable nonnegative_ssim
 
-For ssim, it is recommended to set `nonnegative_ssim=True` to avoid negative results. This option is set to `False` by default to get consistent results as tensorflow and skimage.
+For ssim, it is recommended to set `nonnegative_ssim=True` to avoid negative results. However, this option is set to `False` by default to keep it consistent with tensorflow and skimage.
 
 For ms-ssim, there is no nonnegative_ssim option and the ssim reponses is forced to be non-negative to avoid NaN results.
 
