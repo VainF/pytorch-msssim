@@ -38,9 +38,9 @@ def gaussian_filter(input, win):
         out = F.conv2d(out, win.transpose(2, 3), stride=1, padding=0, groups=C)
     elif len(input.shape) == 5:
         N, C, T, H, W = input.shape
-        out = F.conv3d(input, win, stride=1, padding=0, groups=C)
-        out = F.conv3d(out, win.transpose(3, 4), stride=1, padding=0, groups=C)
-        out = F.conv3d(out, win.transpose(2, 4), stride=1, padding=0, groups=C)
+        out = F.conv3d(input, weight=win, stride=1, padding=0, groups=C)
+        out = F.conv3d(out, weight=win.transpose(3, 4), stride=1, padding=0, groups=C)
+        out = F.conv3d(out, weight=win.transpose(2, 4), stride=1, padding=0, groups=C)
     else:
         raise NotImplementedError(input.shape)
 
@@ -226,6 +226,7 @@ class SSIM(torch.nn.Module):
         win_size=11,
         win_sigma=1.5,
         channel=3,
+        spatial_dims=2,
         K=(0.01, 0.03),
         nonnegative_ssim=False,
     ):
@@ -242,7 +243,7 @@ class SSIM(torch.nn.Module):
 
         super(SSIM, self).__init__()
         self.win_size = win_size
-        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat(channel, 1, 1, 1)
+        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat([channel, 1] + [1] * spatial_dims)
         self.size_average = size_average
         self.data_range = data_range
         self.K = K
@@ -262,7 +263,7 @@ class SSIM(torch.nn.Module):
 
 class MS_SSIM(torch.nn.Module):
     def __init__(
-        self, data_range=255, size_average=True, win_size=11, win_sigma=1.5, channel=3, weights=None, K=(0.01, 0.03)
+        self, data_range=255, size_average=True, win_size=11, win_sigma=1.5, channel=3, spatial_dims=2, weights=None, K=(0.01, 0.03)
     ):
         r""" class for ms-ssim
         Args:
@@ -277,7 +278,7 @@ class MS_SSIM(torch.nn.Module):
 
         super(MS_SSIM, self).__init__()
         self.win_size = win_size
-        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat(channel, 1, 1, 1)
+        self.win = _fspecial_gauss_1d(win_size, win_sigma).repeat([channel, 1] + [1] * spatial_dims)
         self.size_average = size_average
         self.data_range = data_range
         self.weights = weights
