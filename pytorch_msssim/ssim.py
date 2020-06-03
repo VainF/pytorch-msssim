@@ -32,9 +32,18 @@ def gaussian_filter(input, win):
     Returns:
         torch.Tensor: blured tensors
     """
-    N, C, H, W = input.shape
-    out = F.conv2d(input, win, stride=1, padding=0, groups=C)
-    out = F.conv2d(out, win.transpose(2, 3), stride=1, padding=0, groups=C)
+    if len(input.shape) == 4:
+        N, C, H, W = input.shape
+        out = F.conv2d(input, win, stride=1, padding=0, groups=C)
+        out = F.conv2d(out, win.transpose(2, 3), stride=1, padding=0, groups=C)
+    elif len(input.shape) == 5:
+        N, C, T, H, W = input.shape
+        out = F.conv3d(input, win, stride=1, padding=0, groups=C)
+        out = F.conv3d(out, win.transpose(3, 4), stride=1, padding=0, groups=C)
+        out = F.conv3d(out, win.transpose(2, 4), stride=1, padding=0, groups=C)
+    else:
+        raise NotImplementedError(input.shape)
+
     return out
 
 
@@ -53,7 +62,7 @@ def _ssim(X, Y, data_range, win, size_average=True, K=(0.01, 0.03)):
         torch.Tensor: ssim results.
     """
     K1, K2 = K
-    batch, channel, height, width = X.shape
+    # batch, channel, [depth,] height, width = X.shape
     compensation = 1.0
 
     C1 = (K1 * data_range) ** 2
@@ -107,8 +116,8 @@ def ssim(
         torch.Tensor: ssim results
     """
 
-    if len(X.shape) != 4:
-        raise ValueError("Input images should be 4-d tensors.")
+    if len(X.shape) not in (4, 5):
+        raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
     if not X.type() == Y.type():
         raise ValueError("Input images should have the same dtype.")
@@ -124,7 +133,7 @@ def ssim(
 
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
-        win = win.repeat(X.shape[1], 1, 1, 1)
+        win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
 
     ssim_per_channel, cs = _ssim(X, Y, data_range=data_range, win=win, size_average=False, K=K)
     if nonnegative_ssim:
@@ -154,8 +163,8 @@ def ms_ssim(
     Returns:
         torch.Tensor: ms-ssim results
     """
-    if len(X.shape) != 4:
-        raise ValueError("Input images should be 4-d tensors.")
+    if len(X.shape) not in (4, 5):
+        raise ValueError("Input images should be 4-d or 5-d tensors.")
 
     if not X.type() == Y.type():
         raise ValueError("Input images should have the same dtype.")
@@ -180,7 +189,7 @@ def ms_ssim(
 
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
-        win = win.repeat(X.shape[1], 1, 1, 1)
+        win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
 
     levels = weights.shape[0]
     mcs = []
@@ -190,8 +199,14 @@ def ms_ssim(
         if i < levels - 1:
             mcs.append(torch.relu(cs))
             padding = (X.shape[2] % 2, X.shape[3] % 2)
-            X = F.avg_pool2d(X, kernel_size=2, padding=padding)
-            Y = F.avg_pool2d(Y, kernel_size=2, padding=padding)
+            if len(X.shape) == 4:
+                X = F.avg_pool2d(X, kernel_size=2, padding=padding)
+                Y = F.avg_pool2d(Y, kernel_size=2, padding=padding)
+            elif len(X.shape) == 5:
+                X = F.avg_pool3d(X, kernel_size=2, padding=padding)
+                Y = F.avg_pool3d(Y, kernel_size=2, padding=padding)
+            else:
+                raise NotImplementedError(X.shape)
 
     ssim_per_channel = torch.relu(ssim_per_channel)  # (batch, channel)
     mcs_and_ssim = torch.stack(mcs + [ssim_per_channel], dim=0)  # (level, batch, channel)
