@@ -115,15 +115,18 @@ def ssim(
     Returns:
         torch.Tensor: ssim results
     """
+    if not X.shape == Y.shape:
+        raise ValueError("Input images should have the same dimensions.")
+
+    for d in range(len(X.shape) -1, 1, -1):
+        X = X.squeeze(dim=d)
+        Y = Y.squeeze(dim=d)
 
     if len(X.shape) not in (4, 5):
         raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
     if not X.type() == Y.type():
         raise ValueError("Input images should have the same dtype.")
-
-    if not X.shape == Y.shape:
-        raise ValueError("Input images should have the same shape.")
 
     if win is not None:  # set win_size
         win_size = win.shape[-1]
@@ -151,8 +154,8 @@ def ms_ssim(
 
     r""" interface of ms-ssim
     Args:
-        X (torch.Tensor): a batch of images, (N,C,H,W)
-        Y (torch.Tensor): a batch of images, (N,C,H,W)
+        X (torch.Tensor): a batch of images, (N,C,[T,]H,W)
+        Y (torch.Tensor): a batch of images, (N,C,[T,]H,W)
         data_range (float or int, optional): value range of input images. (usually 1.0 or 255)
         size_average (bool, optional): if size_average=True, ssim of all images will be averaged as a scalar
         win_size: (int, optional): the size of gauss kernel
@@ -163,14 +166,22 @@ def ms_ssim(
     Returns:
         torch.Tensor: ms-ssim results
     """
-    if len(X.shape) not in (4, 5):
-        raise ValueError("Input images should be 4-d or 5-d tensors.")
+    if not X.shape == Y.shape:
+        raise ValueError("Input images should have the same dimensions.")
+
+    for d in range(len(X.shape) -1, 1, -1):
+        X = X.squeeze(dim=d)
+        Y = Y.squeeze(dim=d)
 
     if not X.type() == Y.type():
         raise ValueError("Input images should have the same dtype.")
 
-    if not X.shape == Y.shape:
-        raise ValueError("Input images should have the same dimensions.")
+    if len(X.shape) == 4:
+        avg_pool = F.avg_pool2d
+    elif len(X.shape) == 5:
+        avg_pool = F.avg_pool3d
+    else:
+        raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
     if win is not None:  # set win_size
         win_size = win.shape[-1]
@@ -191,6 +202,7 @@ def ms_ssim(
         win = _fspecial_gauss_1d(win_size, win_sigma)
         win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
 
+
     levels = weights.shape[0]
     mcs = []
     for i in range(levels):
@@ -198,15 +210,9 @@ def ms_ssim(
 
         if i < levels - 1:
             mcs.append(torch.relu(cs))
-            padding = (X.shape[2] % 2, X.shape[3] % 2)
-            if len(X.shape) == 4:
-                X = F.avg_pool2d(X, kernel_size=2, padding=padding)
-                Y = F.avg_pool2d(Y, kernel_size=2, padding=padding)
-            elif len(X.shape) == 5:
-                X = F.avg_pool3d(X, kernel_size=2, padding=padding)
-                Y = F.avg_pool3d(Y, kernel_size=2, padding=padding)
-            else:
-                raise NotImplementedError(X.shape)
+            padding = [s % 2 for s in X.shape[2:]]
+            X = avg_pool(X, kernel_size=2, padding=padding)
+            Y = avg_pool(Y, kernel_size=2, padding=padding)
 
     ssim_per_channel = torch.relu(ssim_per_channel)  # (batch, channel)
     mcs_and_ssim = torch.stack(mcs + [ssim_per_channel], dim=0)  # (level, batch, channel)
@@ -263,7 +269,15 @@ class SSIM(torch.nn.Module):
 
 class MS_SSIM(torch.nn.Module):
     def __init__(
-        self, data_range=255, size_average=True, win_size=11, win_sigma=1.5, channel=3, spatial_dims=2, weights=None, K=(0.01, 0.03)
+        self,
+        data_range=255,
+        size_average=True,
+        win_size=11,
+        win_sigma=1.5,
+        channel=3,
+        spatial_dims=2,
+        weights=None,
+        K=(0.01, 0.03),
     ):
         r""" class for ms-ssim
         Args:
