@@ -1,5 +1,6 @@
 # Copyright 2020 by Gongfan Fang, Zhejiang University.
 # All rights reserved.
+import warnings
 
 import torch
 import torch.nn.functional as F
@@ -32,17 +33,23 @@ def gaussian_filter(input, win):
     Returns:
         torch.Tensor: blurred tensors
     """
+    assert all([ws == 1 for ws in win.shape[:-1]]), win.shape
     if len(input.shape) == 4:
-        N, C, H, W = input.shape
-        out = F.conv2d(input, win, stride=1, padding=0, groups=C)
-        out = F.conv2d(out, win.transpose(2, 3), stride=1, padding=0, groups=C)
+        conv = F.conv2d
     elif len(input.shape) == 5:
-        N, C, T, H, W = input.shape
-        out = F.conv3d(input, weight=win, stride=1, padding=0, groups=C)
-        out = F.conv3d(out, weight=win.transpose(3, 4), stride=1, padding=0, groups=C)
-        out = F.conv3d(out, weight=win.transpose(2, 4), stride=1, padding=0, groups=C)
+        conv = F.conv3d
     else:
         raise NotImplementedError(input.shape)
+
+    C = input.shape[1]
+    out = input
+    for i, s in enumerate(input.shape[2:]):
+        if s >= win.shape[-1]:
+            out = conv(out, weight=win.transpose(2 + i, -1), stride=1, padding=0, groups=C)
+        else:
+            warnings.warn(
+                f"Skipping Gaussian Smoothing at dimension 2+{i} for input: {input.shape} and win size: {win.shape[-1]}"
+            )
 
     return out
 
@@ -118,7 +125,7 @@ def ssim(
     if not X.shape == Y.shape:
         raise ValueError("Input images should have the same dimensions.")
 
-    for d in range(len(X.shape) -1, 1, -1):
+    for d in range(len(X.shape) - 1, 1, -1):
         X = X.squeeze(dim=d)
         Y = Y.squeeze(dim=d)
 
@@ -169,7 +176,7 @@ def ms_ssim(
     if not X.shape == Y.shape:
         raise ValueError("Input images should have the same dimensions.")
 
-    for d in range(len(X.shape) -1, 1, -1):
+    for d in range(len(X.shape) - 1, 1, -1):
         X = X.squeeze(dim=d)
         Y = Y.squeeze(dim=d)
 
@@ -201,7 +208,6 @@ def ms_ssim(
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
         win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
-
 
     levels = weights.shape[0]
     mcs = []
