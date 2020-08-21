@@ -13,8 +13,11 @@ Multi-Scale Structural Similarity (MS-SSIM):
 </div>
 
 # Updates
+### _2020.08.21_ (v0.2.1)
 
-### _2020.04.30_  
+3D image support from @FynnBe!  
+
+### _2020.04.30_ (v0.2)
 
 Now (v0.2), **ssim & ms-ssim are calculated in the same way as tensorflow and skimage**, except that zero padding rather than symmetric padding is used during downsampling (there is no symmetric padding in pytorch). The comparison results between pytorch-msssim, tensorflow and skimage can be found in the Tests section.
 
