@@ -15,7 +15,7 @@ Multi-Scale Structural Similarity (MS-SSIM):
 # Updates
 ### _2020.08.21_ (v0.2.1)
 
-3D image support from @FynnBe!  
+3D image support from [@FynnBe](https://github.com/FynnBe)!  
 
 ### _2020.04.30_ (v0.2)
 
