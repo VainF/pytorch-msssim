@@ -33,7 +33,7 @@ def gaussian_filter(input, win):
     Returns:
         torch.Tensor: blurred tensors
     """
-    assert all([ws == 1 for ws in win.shape[:-1]]), win.shape
+    assert all([ws == 1 for ws in win.shape[1:-1]]), win.shape
     if len(input.shape) == 4:
         conv = F.conv2d
     elif len(input.shape) == 5:
