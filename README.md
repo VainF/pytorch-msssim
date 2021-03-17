@@ -76,7 +76,7 @@ For ms-ssim, there is no nonnegative_ssim option and the ssim reponses is forced
 ```bash
 cd tests
 ```
-### 1. Comparions between pytorch-msssim, skimage and tensorflow on CPU.
+### 1. Benchmark
 
 ```bash
 # requires tf2
