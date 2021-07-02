@@ -19,7 +19,7 @@ Multi-Scale Structural Similarity (MS-SSIM):
 
 ### _2020.04.30_ (v0.2)
 
-Now (v0.2), **ssim & ms-ssim are calculated in the same way as tensorflow and skimage**. A benchmark (pytorch-msssim, tensorflow and skimage) can be found in the Tests section.
+Now (v0.2), **ssim & ms-ssim can produce consistent results as tensorflow and skimage**. A benchmark (pytorch-msssim, tensorflow and skimage) can be found in the Tests section.
 
 # Installation
 
