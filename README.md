@@ -12,7 +12,7 @@ Multi-Scale Structural Similarity (MS-SSIM):
 <img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/ms-ssim.png" width="55%">
 </div>
 
-# Updates
+# Update
 ### _2020.08.21_ (v0.2.1)
 
 3D image support from [@FynnBe](https://github.com/FynnBe)!  
