@@ -1,6 +1,6 @@
 # Pytorch MS-SSIM
 
-Fast and differentiable MS-SSIM and SSIM for pytorch 1.0+
+Fast and differentiable MS-SSIM and SSIM for pytorch.
 
 <div>
 <img src="https://github.com/VainF/Images/blob/master/pytorch_msssim/lcs.png" width="25%">
