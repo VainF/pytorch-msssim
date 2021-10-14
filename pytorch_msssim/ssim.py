@@ -15,7 +15,7 @@ def _fspecial_gauss_1d(size, sigma):
     Returns:
         torch.Tensor: 1D kernel (1 x 1 x size)
     """
-    coords = torch.arange(size).to(dtype=torch.float)
+    coords = torch.arange(size, dtype=torch.float)
     coords -= size // 2
 
     g = torch.exp(-(coords ** 2) / (2 * sigma ** 2))
@@ -203,7 +203,7 @@ def ms_ssim(
 
     if weights is None:
         weights = [0.0448, 0.2856, 0.3001, 0.2363, 0.1333]
-    weights = torch.FloatTensor(weights).to(X.device, dtype=X.dtype)
+    weights = torch.FloatTensor(weights, device=X.device, dtype=X.dtype)
 
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
