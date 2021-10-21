@@ -47,7 +47,7 @@ ssim_loss = 1 - ssim( X, Y, data_range=255, size_average=True) # return a scalar
 ms_ssim_loss = 1 - ms_ssim( X, Y, data_range=255, size_average=True )
 
 # reuse the gaussian kernel with SSIM & MS_SSIM. 
-ssim_module = SSIM(data_range=255, size_average=True, channel=3)
+ssim_module = SSIM(data_range=255, size_average=True, channel=3) # channel=1 for grayscale images
 ms_ssim_module = MS_SSIM(data_range=255, size_average=True, channel=3)
 
 ssim_loss = 1 - ssim_module(X, Y)
