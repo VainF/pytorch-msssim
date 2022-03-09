@@ -203,7 +203,7 @@ def ms_ssim(
 
     if weights is None:
         weights = [0.0448, 0.2856, 0.3001, 0.2363, 0.1333]
-    weights = torch.FloatTensor(weights, device=X.device, dtype=X.dtype)
+    weights = X.new_tensor(weights)
 
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
