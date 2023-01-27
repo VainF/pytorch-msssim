@@ -123,7 +123,7 @@ def ssim(
         torch.Tensor: ssim results
     """
     if not X.shape == Y.shape:
-        raise ValueError("Input images should have the same dimensions.")
+        raise ValueError(f"Input images should have the same dimensions, but got {X.shape} and {Y.shape}.")
 
     for d in range(len(X.shape) - 1, 1, -1):
         X = X.squeeze(dim=d)
@@ -133,7 +133,7 @@ def ssim(
         raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
     if not X.type() == Y.type():
-        raise ValueError("Input images should have the same dtype.")
+        raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
 
     if win is not None:  # set win_size
         win_size = win.shape[-1]
@@ -174,14 +174,14 @@ def ms_ssim(
         torch.Tensor: ms-ssim results
     """
     if not X.shape == Y.shape:
-        raise ValueError("Input images should have the same dimensions.")
+        raise ValueError(f"Input images should have the same dimensions, but got {X.shape} and {Y.shape}.")
 
     for d in range(len(X.shape) - 1, 1, -1):
         X = X.squeeze(dim=d)
         Y = Y.squeeze(dim=d)
 
     if not X.type() == Y.type():
-        raise ValueError("Input images should have the same dtype.")
+        raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
 
     if len(X.shape) == 4:
         avg_pool = F.avg_pool2d
@@ -203,7 +203,7 @@ def ms_ssim(
 
     if weights is None:
         weights = [0.0448, 0.2856, 0.3001, 0.2363, 0.1333]
-    weights = torch.FloatTensor(weights, device=X.device, dtype=X.dtype)
+    weights = X.new_tensor(weights)
 
     if win is None:
         win = _fspecial_gauss_1d(win_size, win_sigma)
