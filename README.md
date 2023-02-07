@@ -14,7 +14,7 @@ Multi-Scale Structural Similarity (MS-SSIM):
 
 Why it is faster than other versions?
 
-Gaussian kernels used in SSIM & MS-SSIM are seperable. A [separable filter](https://en.wikipedia.org/wiki/Separable_filter) in image processing can be written as product of two more simple filters. Typically a 2-dimensional convolution operation is separated into two 1-dimensional filters. This reduces the computational costs on an $N\times M$ image with a $m\times n$ filter from $\mathcal{O}(M\cdot N \cdot m \cdot n)$ down to $\mathcal{O}(M\cdot N \cdot (m+n))$. More importantly, the seperated kernels are more contiguous and thus cache-friendly, which effectively accelerates the computing of SSIM/MS-SSIM. 
+Gaussian kernels used in SSIM & MS-SSIM are seperable. A [separable filter](https://en.wikipedia.org/wiki/Separable_filter) in image processing can be written as product of two more simple filters. Typically a 2-dimensional convolution operation is separated into two 1-dimensional filters. This reduces the computational costs on an $N\times M$ image with a $m\times n$ filter from $\mathcal{O}(M\cdot N \cdot m \cdot n)$ down to $\mathcal{O}(M\cdot N \cdot (m+n))$. More importantly, seperated kernels are more contiguous and thus cache-friendly than 2-D kernel, which effectively accelerates the computing of SSIM/MS-SSIM. 
 
 # Update
 ### _2020.08.21_ (v0.2.1)
