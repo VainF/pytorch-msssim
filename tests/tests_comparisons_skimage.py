@@ -34,7 +34,7 @@ if __name__ == '__main__':
         begin = time.time()
         for _ in range(N_repeat):
             ssim_skimage = structural_similarity(img, img_noise, win_size=11, multichannel=True,
-                                    sigma=1.5, data_range=255, use_sample_covariance=False, gaussian_weights=True)
+                                    sigma=1.5, data_range=255, channel_axis=2, use_sample_covariance=False, gaussian_weights=True)
         time_skimage = (time.time()-begin) / N_repeat
 
         img_torch = torch.from_numpy(img).unsqueeze(0).permute(0, 3, 1, 2)  # 1, C, H, W
