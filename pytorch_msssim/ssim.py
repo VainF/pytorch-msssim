@@ -156,7 +156,7 @@ def ssim(
 
 
 def ms_ssim(
-    X, Y, data_range=255, size_average=True, win_size=11, win_sigma=1.5, win=None, weights=None, K=(0.01, 0.03)
+    X, Y, data_range=255, size_average=True, win_size=11, win_sigma=1.5, win=None, weights=None, K=(0.01, 0.03), nonnegative_ssim=False,
 ):
 
     r""" interface of ms-ssim
@@ -220,7 +220,8 @@ def ms_ssim(
             X = avg_pool(X, kernel_size=2, padding=padding)
             Y = avg_pool(Y, kernel_size=2, padding=padding)
 
-    ssim_per_channel = torch.relu(ssim_per_channel)  # (batch, channel)
+    if nonnegative_ssim:
+        ssim_per_channel = torch.relu(ssim_per_channel)  # (batch, channel)
     mcs_and_ssim = torch.stack(mcs + [ssim_per_channel], dim=0)  # (level, batch, channel)
     ms_ssim_val = torch.prod(mcs_and_ssim ** weights.view(-1, 1, 1), dim=0)
 
@@ -284,6 +285,7 @@ class MS_SSIM(torch.nn.Module):
         spatial_dims=2,
         weights=None,
         K=(0.01, 0.03),
+        nonnegative_ssim=True,
     ):
         r""" class for ms-ssim
         Args:
@@ -303,6 +305,7 @@ class MS_SSIM(torch.nn.Module):
         self.data_range = data_range
         self.weights = weights
         self.K = K
+        self.nonnegative_ssim = nonnegative_ssim
 
     def forward(self, X, Y):
         return ms_ssim(
@@ -313,4 +316,5 @@ class MS_SSIM(torch.nn.Module):
             win=self.win,
             weights=self.weights,
             K=self.K,
+            nonnegative_ssim=self.nonnegative_ssim,
         )
