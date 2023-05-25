@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://pepy.tech/badge/pytorch_msssim)](https://pepy.tech/project/pytorch_msssim)
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-0.2.1-blue.svg)](https://github.com/VainF/pytorch_msssim/releases/latest)
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-1.0.0-blue.svg)](https://github.com/VainF/pytorch_msssim/releases/latest)
 
 Fast and differentiable MS-SSIM and SSIM for pytorch.
 
@@ -21,6 +21,11 @@ Fast and differentiable MS-SSIM and SSIM for pytorch.
 Gaussian kernels used in SSIM & MS-SSIM are seperable. A [separable filter](https://en.wikipedia.org/wiki/Separable_filter) in image processing can be written as product of two more simple filters. Typically a 2-dimensional convolution operation is separated into two 1-dimensional filters. This reduces the computational costs on an $N\times M$ image with a $m\times n$ filter from $\mathcal{O}(M\cdot N \cdot m \cdot n)$ down to $\mathcal{O}(M\cdot N \cdot (m+n))$. More importantly, seperated kernels are more contiguous and thus cache-friendly than 2-D kernels, which effectively accelerates the computing of SSIM/MS-SSIM. 
 
 # Update
+
+#### _2023.05.26_ (v1.0.0)
+
+Just a release.
+
 #### _2020.08.21_ (v0.2.1)
 
 3D image support from [@FynnBe](https://github.com/FynnBe)!  
