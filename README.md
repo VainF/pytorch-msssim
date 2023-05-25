@@ -24,7 +24,7 @@ Gaussian kernels used in SSIM & MS-SSIM are seperable. A [separable filter](http
 
 #### _2023.05.26_ (v1.0.0)
 
-Just a release.
+Just a release. Type hints by [@iyume](https://github.com/iyume)
 
 #### _2020.08.21_ (v0.2.1)
 
