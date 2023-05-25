@@ -138,8 +138,8 @@ def ssim(
     if len(X.shape) not in (4, 5):
         raise ValueError(f"Input images should be 4-d or 5-d tensors, but got {X.shape}")
 
-    if not X.type() == Y.type():
-        raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
+    #if not X.type() == Y.type():
+    #    raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
 
     if win is not None:  # set win_size
         win_size = win.shape[-1]
@@ -193,8 +193,8 @@ def ms_ssim(
         X = X.squeeze(dim=d)
         Y = Y.squeeze(dim=d)
 
-    if not X.type() == Y.type():
-        raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
+    #if not X.type() == Y.type():
+    #    raise ValueError(f"Input images should have the same dtype, but got {X.type()} and {Y.type()}.")
 
     if len(X.shape) == 4:
         avg_pool = F.avg_pool2d
