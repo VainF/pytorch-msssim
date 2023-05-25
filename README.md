@@ -1,4 +1,4 @@
-# Pytorch MS-SSIM
+# PyTorch MS-SSIM
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://pepy.tech/badge/pytorch_msssim)](https://pepy.tech/project/pytorch_msssim)
