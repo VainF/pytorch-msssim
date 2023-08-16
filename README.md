@@ -1,7 +1,8 @@
 # PyTorch MS-SSIM
 
+
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Downloads](https://pepy.tech/badge/pytorch_msssim)](https://pepy.tech/project/pytorch_msssim)
+[![Downloads](https://static.pepy.tech/badge/pytorch_msssim)](https://pepy.tech/project/pytorch_msssim)
 [![Latest Version](https://img.shields.io/badge/Latest%20Version-1.0.0-blue.svg)](https://github.com/VainF/pytorch_msssim/releases/latest)
 
 Fast and differentiable MS-SSIM and SSIM for pytorch.
