@@ -60,7 +60,8 @@ def _ssim(
     data_range: float,
     win: Tensor,
     size_average: bool = True,
-    K: Union[Tuple[float, float], List[float]] = (0.01, 0.03)
+    K: Union[Tuple[float, float], List[float]] = (0.01, 0.03),
+    alpha_beta_gamma: Tuple[float, float, float] = (1, 1, 1)
 ) -> Tuple[Tensor, Tensor]:
     r""" Calculate ssim index for X and Y
 
@@ -80,6 +81,7 @@ def _ssim(
 
     C1 = (K1 * data_range) ** 2
     C2 = (K2 * data_range) ** 2
+    C3 = C2 / 2
 
     win = win.to(X.device, dtype=X.dtype)
 
@@ -93,9 +95,16 @@ def _ssim(
     sigma1_sq = compensation * (gaussian_filter(X * X, win) - mu1_sq)
     sigma2_sq = compensation * (gaussian_filter(Y * Y, win) - mu2_sq)
     sigma12 = compensation * (gaussian_filter(X * Y, win) - mu1_mu2)
+    sigma1 = sigma1_sq ** 0.5
+    sigma2 = sigma2_sq ** 0.5
 
-    cs_map = (2 * sigma12 + C2) / (sigma1_sq + sigma2_sq + C2)  # set alpha=beta=gamma=1
-    ssim_map = ((2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)) * cs_map
+    alpha, beta, gamma = alpha_beta_gamma
+    luminance = (2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)
+    contrast = (2 * sigma1 * sigma2 + C2)  / (sigma1_sq + sigma2_sq + C2)
+    structure = (sigma12 + C3) / (sigma1 + sigma2 + C3)
+
+    cs_map = (contrast ** beta) * (structure ** gamma)
+    ssim_map = (luminance ** alpha) * cs_map
 
     ssim_per_channel = torch.flatten(ssim_map, 2).mean(-1)
     cs = torch.flatten(cs_map, 2).mean(-1)
