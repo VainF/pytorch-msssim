@@ -60,7 +60,8 @@ def _ssim(
     data_range: float,
     win: Tensor,
     size_average: bool = True,
-    K: Union[Tuple[float, float], List[float]] = (0.01, 0.03)
+    K: Union[Tuple[float, float], List[float]] = (0.01, 0.03),
+    return_map: bool = False,
 ) -> Tuple[Tensor, Tensor]:
     r""" Calculate ssim index for X and Y
 
@@ -97,6 +98,9 @@ def _ssim(
     cs_map = (2 * sigma12 + C2) / (sigma1_sq + sigma2_sq + C2)  # set alpha=beta=gamma=1
     ssim_map = ((2 * mu1_mu2 + C1) / (mu1_sq + mu2_sq + C1)) * cs_map
 
+    if return_map:
+        return ssim_map, cs_map
+
     ssim_per_channel = torch.flatten(ssim_map, 2).mean(-1)
     cs = torch.flatten(cs_map, 2).mean(-1)
     return ssim_per_channel, cs
@@ -112,6 +116,7 @@ def ssim(
     win: Optional[Tensor] = None,
     K: Union[Tuple[float, float], List[float]] = (0.01, 0.03),
     nonnegative_ssim: bool = False,
+    return_map: bool = False,
 ) -> Tensor:
     r""" interface of ssim
     Args:
@@ -124,6 +129,8 @@ def ssim(
         win (torch.Tensor, optional): 1-D gauss kernel. if None, a new kernel will be created according to win_size and win_sigma
         K (list or tuple, optional): scalar constants (K1, K2). Try a larger K2 constant (e.g. 0.4) if you get a negative or NaN results.
         nonnegative_ssim (bool, optional): force the ssim response to be nonnegative with relu
+        return_map (bool, optional): return the local score for each valid window and channel
+            without averaging. With nonnegative_ssim, clamps individual window scores.
 
     Returns:
         torch.Tensor: ssim results
@@ -151,14 +158,17 @@ def ssim(
         win = _fspecial_gauss_1d(win_size, win_sigma)
         win = win.repeat([X.shape[1]] + [1] * (len(X.shape) - 1))
 
-    ssim_per_channel, cs = _ssim(X, Y, data_range=data_range, win=win, size_average=False, K=K)
+    score, _ = _ssim(X, Y, data_range=data_range, win=win, size_average=False, K=K, return_map=return_map)
     if nonnegative_ssim:
-        ssim_per_channel = torch.relu(ssim_per_channel)
+        score = torch.relu(score)
+
+    if return_map:
+        return score
 
     if size_average:
-        return ssim_per_channel.mean()
+        return score.mean()
     else:
-        return ssim_per_channel.mean(1)
+        return score.mean(1)
 
 
 def ms_ssim(
@@ -274,7 +284,7 @@ class SSIM(torch.nn.Module):
         self.K = K
         self.nonnegative_ssim = nonnegative_ssim
 
-    def forward(self, X: Tensor, Y: Tensor) -> Tensor:
+    def forward(self, X: Tensor, Y: Tensor, return_map: bool = False) -> Tensor:
         return ssim(
             X,
             Y,
@@ -283,6 +293,7 @@ class SSIM(torch.nn.Module):
             win=self.win,
             K=self.K,
             nonnegative_ssim=self.nonnegative_ssim,
+            return_map=return_map,
         )
 
 

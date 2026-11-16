@@ -52,6 +52,7 @@ from pytorch_msssim import ssim, ms_ssim, SSIM, MS_SSIM
 
 # calculate ssim & ms-ssim for each image
 ssim_val = ssim( X, Y, data_range=255, size_average=False) # return (N,)
+local_scores = ssim(X, Y, data_range=255, return_map=True) # (N, C, H-10, W-10) for an 11x11 window
 ms_ssim_val = ms_ssim( X, Y, data_range=255, size_average=False ) #(N,)
 
 # set 'size_average=True' to get a scalar value as loss. see tests/tests_loss.py for more details
